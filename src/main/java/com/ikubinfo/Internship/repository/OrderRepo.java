@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface OrderRepo extends JpaRepository<Order,String> {
+public interface OrderRepo extends JpaRepository<Order,Long> {
 
     @Query(value = "SELECT DATE(order_date)" +
             "     , SUM(total) AS daily_total" +

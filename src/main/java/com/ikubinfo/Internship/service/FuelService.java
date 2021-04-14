@@ -3,7 +3,6 @@ package com.ikubinfo.Internship.service;
 import com.ikubinfo.Internship.entity.Fuel;
 import com.ikubinfo.Internship.entity.PriceData;
 import com.ikubinfo.Internship.repository.FuelRepo;
-import com.ikubinfo.Internship.repository.PriceDataRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,36 +15,33 @@ import java.util.List;
 @Service
 public class FuelService {
     private final FuelRepo fuelRepo;
-    private final PriceDataRepo priceRepo;
+    private final PriceDataService priceDataService;
 
     @Autowired
-    public FuelService(FuelRepo fuelRepo, PriceDataRepo priceRepo) {
+    public FuelService(FuelRepo fuelRepo, PriceDataService priceDataService) {
         this.fuelRepo = fuelRepo;
-        this.priceRepo = priceRepo;
+        this.priceDataService = priceDataService;
     }
 
+    public List<Fuel> getAllFuels(){
+        return fuelRepo.findAll();
+    }
 
+    public Fuel getFuel(String type){
+        return fuelRepo.getByType(type);
+    }
 
-    public void addFuel(Fuel newFuelType) throws EntityExistsException{
+    @Transactional
+    public Fuel addFuel(Fuel newFuelType) throws EntityExistsException{
         try {
-            fuelRepo.save(newFuelType);             //because the "name" column has a unique constrain this will throw an Exc if trying to register twice
+            return fuelRepo.save(newFuelType);             //because the "name" column has a unique constrain this will throw an Exc if trying to register twice
         }catch (Exception e){
             throw new EntityExistsException("This type of fuel already exists, try changing its price.");
         }
     }
-    public void changePrice(String fuelType, Double newPrice) throws EntityNotFoundException {
-        Fuel found = fuelRepo.findByType(fuelType);
-        if(found == null){
-            throw new EntityNotFoundException();
-        }
-        if(newPrice > 0){
-            priceRepo.save(new PriceData(found, found.getCurrentPrice()));
-            found.setCurrentPrice(newPrice);
-            fuelRepo.save(found);
-        }else {
-            return;                         // what to do here throw or return ????????????????????????????????
-        }
-
+    @Transactional
+    public Fuel changePrice(PriceData priceData) throws EntityNotFoundException {
+        return fuelRepo.save(priceDataService.saveData(priceData));
     }
 
     @Transactional
@@ -66,9 +62,6 @@ public class FuelService {
             throw new EntityNotFoundException();
         }
         return found.getPriceHistory();             //you should add "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true" ????????????????????????????
-    }
-    public Fuel getFuel(String fuelType){
-        return fuelRepo.findByType(fuelType);
     }
     @Transactional
     public Double buyFuel(Fuel found, Double buyingAmount) throws EntityNotFoundException{

@@ -1,5 +1,6 @@
 package com.ikubinfo.Internship.dto;
 
+import com.ikubinfo.Internship.entity.Worker;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -37,22 +40,22 @@ public class WorkerDto {
     private Double Salary;
 
 
-//    public static WorkerDto entityToDto(Worker worker){
-//        return new WorkerDto(
-//                worker.getId(), worker.getName(), null, worker.getShiftBalance(), worker.getSalary()
-//        );
-//    }
-//
-//    public static Worker dtoToWorker(WorkerDto workerDto, Long adminId){
-//        return new Worker(
-//                workerDto.getId(), workerDto.getName(), workerDto.getPassword(),
-//                workerDto.getShiftBalance(), workerDto.getSalary(), adminId
-//        );
-//    }
-//    public static List<Worker> dtoToWorker(List<WorkerDto> workerDtos){
-//        return workerDtos.stream().map(workerDto -> dtoToWorker(workerDto)).collect(Collectors.toList());
-//    }
-//    public static List<WorkerDto> entityToDto(List<Worker> workers){
-//        return workers.stream().map(worker -> entityToDto(worker)).collect(Collectors.toList());
-//    }
+    public static WorkerDto entityToDto(Worker worker){
+        return new WorkerDto(
+                worker.getId(), worker.getName(), null, worker.getShiftBalance(), worker.getSalary()
+        );
+    }
+
+    public static Worker dtoToWorker(WorkerDto workerDto){
+        return new Worker(
+                workerDto.getId(), workerDto.getName(), workerDto.getPassword(),
+                workerDto.getShiftBalance(), workerDto.getSalary()
+        );
+    }
+    public static List<Worker> dtoToWorker(List<WorkerDto> workerDtos){
+        return workerDtos.stream().map(workerDto -> dtoToWorker(workerDto)).collect(Collectors.toList());
+    }
+    public static List<WorkerDto> entityToDto(List<Worker> workers){
+        return workers.stream().map(worker -> entityToDto(worker)).collect(Collectors.toList());
+    }
 }

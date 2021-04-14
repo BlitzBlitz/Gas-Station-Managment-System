@@ -29,12 +29,12 @@ public class WorkerService {
         this.fuelService = fuelService;
     }
 
-    public Worker registerWorker(Worker newWorker) throws EntityExistsException {
-        try {
-            return workerRepo.save(newWorker);
-        }catch (Exception e){
-            throw new EntityExistsException("This worker already exists");
+    public Worker registerWorker(Worker newWorker) throws EntityExistsException{
+        if(workerRepo.existsById(newWorker.getId())){
+            throw new EntityExistsException("Worker already exists");
         }
+
+        return workerRepo.save(newWorker);
     }
     @Transactional
     public void processOrder(String fuelType, Double amount, String workerName) throws PersistenceException{
@@ -81,7 +81,7 @@ public class WorkerService {
         return workerRepo.findByAdmin_IdAndId(adminId, workerId);
     }
     public Worker updateWorker(Worker worker) throws EntityNotFoundException{
-        if(workerRepo.existsById(worker.getId())){
+        if(!workerRepo.existsById(worker.getId())) {
             throw new EntityNotFoundException("Worker not found");
         }
         return workerRepo.save(worker);

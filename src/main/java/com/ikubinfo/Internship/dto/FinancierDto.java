@@ -33,20 +33,19 @@ public class FinancierDto {
     private Double salary;
 
     public static FinancierDto entityToDto(Financier financier){
-        FinancierDto financierDto = new FinancierDto(
+        return new FinancierDto(
                 financier.getId(), financier.getUsername(), null, financier.getSalary()
         );
-        return financierDto;
     }
 
-    public static Financier dtoToWorker(FinancierDto financierDto){
+    public static Financier dtoToEntity(FinancierDto financierDto){
         Financier financier = new Financier(
                 financierDto.getId(), financierDto.getUsername(), financierDto.getPassword(), financierDto.getSalary()
         );
         return financier;
     }
-    public static List<Financier> dtoToWorker(List<FinancierDto> financierDtos){
-        return financierDtos.stream().map(financierDto -> dtoToWorker(financierDto)).collect(Collectors.toList());
+    public static List<Financier> dtoToEntity(List<FinancierDto> financierDtos){
+        return financierDtos.stream().map(financierDto -> dtoToEntity(financierDto)).collect(Collectors.toList());
     }
     public static List<FinancierDto> entityToDto(List<Financier> financiers){
         return financiers.stream().map(financier -> entityToDto(financier)).collect(Collectors.toList());

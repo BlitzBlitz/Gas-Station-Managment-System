@@ -20,7 +20,7 @@ public class Worker {
     private Double salary;
 
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Admin admin;
 
@@ -30,30 +30,12 @@ public class Worker {
     public Worker() {
     }
 
-    public Worker(String name, String password, Double shiftBalance, Double salary) {
-        this.name = name;
-        this.password = password;
-        this.shiftBalance = shiftBalance;
-        this.salary =salary;
-    }
-
-    public Worker(Long id, String name, String password, Double shiftBalance, Double salary, @NotNull Admin admin, List<Order> orders) {
+    public Worker(Long id, String name, String password, Double shiftBalance, Double salary) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.shiftBalance = shiftBalance;
         this.salary = salary;
-        this.admin = admin;
-        this.orders = orders;
-    }
-
-    public Worker(Long id, String name, String password, Double shiftBalance, Double salary, @NotNull Admin admin) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.shiftBalance = shiftBalance;
-        this.salary = salary;
-        this.admin = admin;
     }
 
 

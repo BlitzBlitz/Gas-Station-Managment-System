@@ -30,10 +30,9 @@ public class FuelDto {
 
 
     public static FuelDto entityToDto(Fuel fuel){
-        FuelDto fuelDto = new FuelDto(
+        return new FuelDto(
                 fuel.getId(), fuel.getType(), fuel.getCurrentPrice(), fuel.getCurrentAvailableAmount()
         );
-        return fuelDto;
     }
 
     public static List<FuelDto> entityToDto(List<Fuel> fuels){
@@ -41,10 +40,9 @@ public class FuelDto {
     }
 
     public static Fuel dtoToEntity(FuelDto fuelDto){
-        Fuel fuel = new Fuel(
+        return new Fuel(
                 fuelDto.getId(),fuelDto.getType(),fuelDto.getCurrentPrice(),fuelDto.getCurrentAvailableAmount()
         );
-        return fuel;
     }
 
     public static List<Fuel> dtoToEntity(List<FuelDto> fuelDtos){

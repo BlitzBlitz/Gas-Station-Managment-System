@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Admin {
+public class Admin{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +21,10 @@ public class Admin {
 
     @OneToMany(mappedBy = "admin")
     List<Worker> workers = new ArrayList<>();
+    @OneToMany(mappedBy = "admin")
+    List<Financier> financiers = new ArrayList<>();
+    @OneToMany(mappedBy = "changedBy")
+    List<PriceData> priceData = new ArrayList<PriceData>();
 
     public Admin() {
     }
@@ -71,5 +75,27 @@ public class Admin {
 
     public void setRegisteredAt(LocalDateTime registeredAt) {
         this.registeredAt = registeredAt;
+    }
+
+    public List<Financier> getFinanciers() {
+        return financiers;
+    }
+
+    public void addFinancier(Financier financier) {
+        this.financiers.add(financier);
+    }
+    public void removeFinancier(Financier financier) {
+        this.financiers.remove(financier);
+    }
+
+    public List<PriceData> getPriceData() {
+        return priceData;
+    }
+
+    public void addPriceData(PriceData priceData) {
+        this.priceData.add(priceData);
+    }
+    public void removePriceData(PriceData priceData) {
+        this.priceData.remove(priceData);
     }
 }

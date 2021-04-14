@@ -34,7 +34,6 @@ public class AdminDto {
         AdminDto adminDto = new AdminDto();
         adminDto.setId(admin.getId());
         adminDto.setName(admin.getName());
-//        adminDto.setPassword(admin.getPassword());
         return adminDto;
     }
 
