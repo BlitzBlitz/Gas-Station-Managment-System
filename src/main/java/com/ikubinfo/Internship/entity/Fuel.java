@@ -2,15 +2,18 @@ package com.ikubinfo.Internship.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Data
 @NoArgsConstructor
+@SQLDelete(sql = "update fuel set is_deleted = true where id=?")
+@Where(clause = "is_deleted = false")
 public class Fuel {
     @Id
     @GeneratedValue
@@ -28,7 +31,10 @@ public class Fuel {
     @OneToMany(mappedBy = "fuelType")
     private final List<Order> orderHistory = new ArrayList<>();
 
+    @OneToMany(mappedBy = "fuelType")
+    private List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();
 
+    private boolean isDeleted = false;
 
     public Fuel(Long id, String type, Double currentPrice, Double currentAvailableAmount) {
         this.id = id;
@@ -37,67 +43,8 @@ public class Fuel {
         this.currentAvailableAmount = currentAvailableAmount;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Double getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public void setCurrentPrice(Double currentPrice) {
-        this.currentPrice = currentPrice;
-    }
-
-    public List<PriceData> getPriceHistory() {
-        return priceHistory;
-    }
-
-    public void addPriceUpdate(PriceData priceUpdate) {
-        this.priceHistory.add(priceUpdate);
-    }
-
-    public List<Order> getOrderHistory() {
-        return orderHistory;
-    }
-
-    public Double getCurrentAvailableAmount() {
-        return currentAvailableAmount;
-    }
-
-    public void setCurrentAvailableAmount(Double currentAvailableAmount) {
-        this.currentAvailableAmount = currentAvailableAmount;
-    }
-    public boolean buy(Double amount){
-        if(this.currentAvailableAmount - amount < 0){
-            return false;
-        }
-        this.currentAvailableAmount -= amount;
-        return true;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Fuel fuel = (Fuel) o;
-        return type.equals(fuel.type);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(type);
+    @PreRemove
+    private void preRemove(){
+        this.isDeleted = true;
     }
 }

@@ -26,7 +26,7 @@ public class AdminController {
 
 
 
-
+    //Admins
     @GetMapping
     public ResponseEntity<List<AdminDto>> getAdmins(){
         List<Admin> adminList = adminService.getAllAdmins();
@@ -56,6 +56,7 @@ public class AdminController {
         adminService.deleteAllAdmins();
     }
 
+    //Fuels
     @GetMapping("/{adminId}/fuels")
     public ResponseEntity<List<FuelDto>> getAllFuels(){
         return new ResponseEntity<List<FuelDto>>(FuelDto.entityToDto(adminService.getAllFuels()), HttpStatus.OK);
@@ -69,12 +70,17 @@ public class AdminController {
         Fuel saved = adminService.addFuel(FuelDto.dtoToEntity(fuelDto));
         return new ResponseEntity<>(FuelDto.entityToDto(saved), HttpStatus.OK);
     }
-    @PutMapping("/{adminId}/fuels")
+    @PutMapping("/{adminId}/fuels/{fuelType}")
     public ResponseEntity<FuelDto> changePrice(@Valid @RequestBody PriceDataDto priceDataDto){
         Fuel updated = adminService.changePrice(PriceDataDto.dtoToEntity(priceDataDto));
         return new ResponseEntity<FuelDto>(FuelDto.entityToDto(updated), HttpStatus.OK);
     }
+    @DeleteMapping("/{adminId}/fuels/{fuelType}")
+    public void deleteFuel(@PathVariable String fuelType){
+        adminService.deleteFuel(fuelType);
+    }
 
+    //Workers
     @GetMapping("/{adminId}/workers")
     public ResponseEntity<List<WorkerDto>> getWorkers(@PathVariable Long adminId){
         return new ResponseEntity<List<WorkerDto>>(WorkerDto.entityToDto(adminService.getAllWorkers(adminId)),
@@ -105,7 +111,7 @@ public class AdminController {
         adminService.deleteAllWorkers(adminId);
     }
 
-
+    //Financiers
     @GetMapping("/{adminId}/financiers")
     public ResponseEntity<List<FinancierDto>> getAllFinanciers(@PathVariable Long adminId){
         return new ResponseEntity<List<FinancierDto>>(FinancierDto.entityToDto(adminService.getAllFinanciers(adminId)),

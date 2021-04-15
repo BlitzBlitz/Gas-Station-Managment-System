@@ -8,6 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,6 +30,9 @@ public class Financier {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     Admin admin;
+
+    @OneToMany(mappedBy = "boughtByFinancier")
+    List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();
 
 
     public Financier(Long id, String username, String password, Double salary) {

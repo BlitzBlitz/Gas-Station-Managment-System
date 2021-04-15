@@ -46,7 +46,6 @@ public class FuelService {
 
     @Transactional
     public void removeFuelType(String fuelType) throws EntityNotFoundException{
-        //should i delete the price history >???????????????????????????
         int result = fuelRepo.deleteByType(fuelType);
         System.out.println(result);
         if( result == 0){
@@ -64,15 +63,18 @@ public class FuelService {
         return found.getPriceHistory();             //you should add "spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true" ????????????????????????????
     }
     @Transactional
-    public Double buyFuel(Fuel found, Double buyingAmount) throws EntityNotFoundException{
-        if(found.buy(buyingAmount)){
+    public Double buyFuel(Fuel fuel, Double buyingAmount){
+        if(fuel.getCurrentAvailableAmount() - buyingAmount >= 0){
+            fuel.setCurrentAvailableAmount(fuel.getCurrentAvailableAmount() - buyingAmount);
             try {
-                fuelRepo.save(found);
+                fuelRepo.save(fuel);
             }catch (Exception e){
                 throw new PersistenceException("Error buying fuel!");
             }
-            return found.getCurrentPrice()*buyingAmount;
+            return fuel.getCurrentPrice()*buyingAmount;
+        }else {
+            throw new PersistenceException("Available amount not enough");
         }
-        return -1.0;
+
     }
 }

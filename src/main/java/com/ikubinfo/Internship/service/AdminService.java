@@ -38,7 +38,7 @@ public class AdminService {
     public Fuel changePrice(PriceData priceData) throws EntityNotFoundException {
         return fuelService.changePrice(priceData);
     }
-    public void removeFuelType(String fuelType){
+    public void deleteFuel(String fuelType){
         fuelService.removeFuelType(fuelType);
     }
     public List<PriceData> getFuelPriceHistory(String fuelType){
