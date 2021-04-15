@@ -24,7 +24,7 @@ public class Worker {
     @NotNull
     private Admin admin;
 
-    @OneToMany(mappedBy = "worker")
+    @OneToMany(mappedBy = "processedBy")
     List<Order> orders = new ArrayList<>();
 
     public Worker() {

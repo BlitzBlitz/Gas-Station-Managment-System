@@ -1,9 +1,12 @@
 package com.ikubinfo.Internship.dto;
 
 import com.ikubinfo.Internship.entity.Financier;
+import com.ikubinfo.Internship.service.GasStationService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -14,7 +17,11 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Component
 public class FinancierDto {
+
+    @Autowired
+    private static GasStationService gasStationService;
 
     @NotNull
     private Long id;
@@ -32,15 +39,19 @@ public class FinancierDto {
     @NotNull
     private Double salary;
 
+    @NotNull
+    private String gasStation;
+
     public static FinancierDto entityToDto(Financier financier){
         return new FinancierDto(
-                financier.getId(), financier.getUsername(), null, financier.getSalary()
+                financier.getId(), financier.getUsername(), null, financier.getSalary(), financier.getGasStations().getName()
         );
     }
 
     public static Financier dtoToEntity(FinancierDto financierDto){
         Financier financier = new Financier(
-                financierDto.getId(), financierDto.getUsername(), financierDto.getPassword(), financierDto.getSalary()
+                financierDto.getId(), financierDto.getUsername(), financierDto.getPassword(), financierDto.getSalary(),
+                gasStationService.getGasStation(financierDto.getGasStation())
         );
         return financier;
     }

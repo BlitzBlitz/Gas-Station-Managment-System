@@ -43,11 +43,13 @@ public class PriceDataDto {
     private String fuelType;
 
     @NotNull
-    private Long changedBy;
+    private String changedBy;
+
+    private Date changedAt;
 
     public static PriceData dtoToEntity(PriceDataDto priceDataDto){
         return new PriceData(priceDataDto.getId(), priceDataDto.getPrice(), fuelService.getFuel(priceDataDto.getFuelType()),
-                adminService.getAdmin(priceDataDto.getChangedBy()), new Date());
+                adminService.getAdminByName(priceDataDto.getChangedBy()), new Date());
     }
     public static List<PriceData> dtoToEntity(List<PriceDataDto> priceDataDtos){
         return priceDataDtos.stream().map(priceDataDto -> dtoToEntity(priceDataDto)).collect(Collectors.toList());
@@ -55,7 +57,7 @@ public class PriceDataDto {
 
     public static PriceDataDto entityToDto(PriceData priceData){
         return new PriceDataDto(priceData.getId(), priceData.getPrice(), priceData.getFuelType().getType(),
-                priceData.getChangedBy().getId());
+                priceData.getChangedBy().getName(), priceData.getPriceChangedDate());
     }
     public static List<PriceDataDto> entityToDto(List<PriceData> priceDataList){
         return priceDataList.stream().map(priceData -> entityToDto(priceData)).collect(Collectors.toList());

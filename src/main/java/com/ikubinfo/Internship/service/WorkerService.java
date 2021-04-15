@@ -1,6 +1,7 @@
 package com.ikubinfo.Internship.service;
 
 import com.ikubinfo.Internship.entity.Fuel;
+import com.ikubinfo.Internship.entity.GasStation;
 import com.ikubinfo.Internship.entity.Order;
 import com.ikubinfo.Internship.entity.Worker;
 import com.ikubinfo.Internship.repository.WorkerRepo;
@@ -20,6 +21,7 @@ public class WorkerService {
     private WorkerRepo workerRepo;
     private OrderService orderService;
     private FuelService fuelService;
+    private GasStationService gasStationService;
 
 
     @Autowired
@@ -37,19 +39,22 @@ public class WorkerService {
         return workerRepo.save(newWorker);
     }
     @Transactional
-    public void processOrder(String fuelType, Double amount, String workerName) throws PersistenceException{
+    public void processOrder(String fuelType, Double amount, String workerName, String gasSName) throws PersistenceException{
         Fuel fuel = fuelService.getFuel(fuelType);
         Worker worker = workerRepo.findByName(workerName);
+        GasStation gasStation = gasStationService.getGasStation(gasSName);
         if(fuel == null){
             throw new PersistenceException("Order not processed. No such fuel type found");
         }else if(worker == null){
             throw new PersistenceException("Order not processed. Worker not found");
+        }else if(gasStation == null){
+            throw new PersistenceException("Order not processed. Gas station not found");
         }
         Double total = fuelService.buyFuel(fuel,amount);
         if(total == -1){                //not enough fuel available
-            throw new PersistenceException("Order not processed. Not enough fuel!");
+            throw new PersistenceException("Order not processed. Not enough fuel available!");
         }
-        orderService.saveOrder(new Order(fuel, amount, worker,total));
+        orderService.saveOrder(new Order(fuel, amount, worker,total, gasStationService.getGasStation(gasSName)));
         worker.setShiftBalance(worker.getShiftBalance() + total);
     }
 
@@ -79,6 +84,9 @@ public class WorkerService {
     }
     public Worker getWorker(Long adminId, Long workerId){
         return workerRepo.findByAdmin_IdAndId(adminId, workerId);
+    }
+    public Worker getWorkerByName(String name){
+        return workerRepo.getByName(name);
     }
     public Worker updateWorker(Worker worker) throws EntityNotFoundException{
         if(!workerRepo.existsById(worker.getId())) {

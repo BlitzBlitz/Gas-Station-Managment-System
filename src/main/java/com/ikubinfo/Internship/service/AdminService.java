@@ -26,44 +26,25 @@ public class AdminService {
         this.financierService = financierService;
     }
 
-    public List<Fuel> getAllFuels(){
-        return fuelService.getAllFuels();
-    }
-    public Fuel getFuel(String type){
-        return fuelService.getFuel(type);
-    }
-    public Fuel addFuel(Fuel fuel){
-        return fuelService.addFuel(fuel);
-    }
-    public Fuel changePrice(PriceData priceData) throws EntityNotFoundException {
-        return fuelService.changePrice(priceData);
-    }
-    public void deleteFuel(String fuelType){
-        fuelService.removeFuelType(fuelType);
-    }
-    public List<PriceData> getFuelPriceHistory(String fuelType){
-        return fuelService.getFuelPriceHistory(fuelType);
-    }
 
-
-    public Admin registerAdmin(Admin admin) throws EntityExistsException{
-        if(adminRepo.existsById(admin.getId())){
-            throw new EntityExistsException("Admin already exists");
-        }
-        return adminRepo.save(admin);
-    }
     public List<Admin> getAllAdmins(){
         return StreamSupport.stream( adminRepo.findAll().spliterator(), false)     //converting from iterable to list
                 .collect(Collectors.toList());
-    }
-    public void deleteAllAdmins(){
-        adminRepo.deleteAll();
     }
     public Admin getAdmin(Long id) throws EntityNotFoundException{
         if(!adminRepo.existsById(id)){
             throw new EntityNotFoundException("Admin not found");
         }
         return adminRepo.findById(id).get();
+    }
+    public Admin getAdminByName(String name){
+        return adminRepo.getByName(name);
+    }
+    public Admin registerAdmin(Admin admin) throws EntityExistsException{
+        if(adminRepo.existsById(admin.getId())){
+            throw new EntityExistsException("Admin already exists");
+        }
+        return adminRepo.save(admin);
     }
     public Admin updateAdmin(Admin admin) throws EntityNotFoundException{
         if(!adminRepo.existsById(admin.getId())){
@@ -74,7 +55,28 @@ public class AdminService {
     public void deleteAdmin(Long id){
         adminRepo.deleteById(id);
     }
+    public void deleteAllAdmins(){
+        adminRepo.deleteAll();
+    }
 
+    public List<Fuel> getAllFuels(){
+        return fuelService.getAllFuels();
+    }
+    public Fuel getFuel(String type){
+        return fuelService.getFuel(type);
+    }
+    public List<PriceData> getFuelPriceHistory(String fuelType){
+        return fuelService.getFuelPriceHistory(fuelType);
+    }
+    public Fuel addFuel(Fuel fuel){
+        return fuelService.addFuel(fuel);
+    }
+    public Fuel changePrice(PriceData priceData) throws EntityNotFoundException {
+        return fuelService.changePrice(priceData);
+    }
+    public void deleteFuel(String fuelType){
+        fuelService.removeFuelType(fuelType);
+    }
 
     public List<Worker> getAllWorkers(Long adminId){
         return workerService.getWorkersOfAdmin(adminId);

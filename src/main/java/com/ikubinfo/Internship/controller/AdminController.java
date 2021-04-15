@@ -62,8 +62,12 @@ public class AdminController {
         return new ResponseEntity<List<FuelDto>>(FuelDto.entityToDto(adminService.getAllFuels()), HttpStatus.OK);
     }
     @GetMapping("/{adminId}/fuels/{fuelType}")
-    public ResponseEntity<FuelDto> getAllFuels(@PathVariable String fuelType){
+    public ResponseEntity<FuelDto> getFuel(@PathVariable String fuelType){
         return new ResponseEntity<>(FuelDto.entityToDto(adminService.getFuel(fuelType)), HttpStatus.OK);
+    }
+    @GetMapping("/{adminId}/fuels/{fuelType}/history")
+    public ResponseEntity<List<PriceDataDto>> getFuelHistory(@PathVariable String fuelType){
+        return new ResponseEntity<>(PriceDataDto.entityToDto(adminService.getFuelPriceHistory(fuelType)), HttpStatus.OK);
     }
     @PostMapping("/{adminId}/fuels")
     public ResponseEntity<FuelDto> addFuel(@Valid @RequestBody FuelDto fuelDto){

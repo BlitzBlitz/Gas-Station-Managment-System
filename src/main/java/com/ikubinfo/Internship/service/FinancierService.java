@@ -21,9 +21,10 @@ public class FinancierService {
     private FinancierRepo financierRepo;
 
     @Autowired
-    public FinancierService(WorkerService workerService,OrderService orderService) {
+    public FinancierService(WorkerService workerService, OrderService orderService, FinancierRepo financierRepo) {
         this.workerService = workerService;
         this.orderService = orderService;
+        this.financierRepo = financierRepo;
     }
 
     public List<Financier> getFinanciersOfAdmin(Long adminId){
@@ -62,17 +63,14 @@ public class FinancierService {
         }
         return workersBalances;
     }
-
     public Map<LocalDate, Double> getYearlyStatistics(int year){
         return orderService.getYearlyStatistics(year);
     }
-
-    public Integer getNumberOfOrdersInADay(LocalDate date){
-        return orderService.getOrdersForToday(date);
+    public Integer getNumberOfOrdersInADay(int year, int month, int day){
+        return orderService.getOrdersForToday(LocalDate.of(year,month,day));
     }
-
-    public Double getTotalOfDay(LocalDate date){
-        return orderService.getTotalOfDay(date);
+    public Double getTotalOfDay(int year, int month, int day){
+        return orderService.getTotalOfDay(LocalDate.of(year,month,day));
     }
     public Double getTotalOfMonth(int year, int month){
         return orderService.getTotalOfMonth(year, month);

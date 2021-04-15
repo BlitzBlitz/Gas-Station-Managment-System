@@ -10,4 +10,5 @@ public interface WorkerRepo extends CrudRepository<Worker, Long > {
     Iterable<Worker> findAllByAdmin_Id(Long adminId);
     Worker findByAdmin_IdAndId(Long adminId, Long workerId);
     Void deleteAllByAdmin_Id(Long adminId);
+    Worker getByName(String name);
 }

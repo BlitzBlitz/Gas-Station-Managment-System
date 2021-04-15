@@ -23,19 +23,21 @@ public class Financier {
     private String password;
     private Double salary;
     @CreationTimestamp
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    Admin admin;
+    private Admin admin;
 
     @OneToMany(mappedBy = "boughtByFinancier")
-    List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();
+    private List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "accountedBy", fetch = FetchType.LAZY)
+    private GasStation gasStations;
 
-    public Financier(Long id, String username, String password, Double salary) {
+    public Financier(Long id, String username, String password, Double salary, GasStation gasStations) {
         this.id = id;
         this.username = username;
         this.password = password;
