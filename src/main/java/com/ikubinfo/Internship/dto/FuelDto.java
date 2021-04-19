@@ -13,25 +13,23 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class FuelDto {
-    @NotNull
-    private Long id;
+
 
     @NotNull
     private String type;
 
-    @NotNull
     @Min(value = 0,message = "Can`t accept negative price")
     private Double currentPrice;
 
-    @NotNull
     @Min(value = 0,message = "Can`t accept negative amount")
     private Double currentAvailableAmount;
 
 
     public static FuelDto entityToDto(Fuel fuel){
         return new FuelDto(
-                fuel.getId(), fuel.getType(), fuel.getCurrentPrice(), fuel.getCurrentAvailableAmount()
+                fuel.getType(), fuel.getCurrentPrice(), fuel.getFuelDeposit().getAvailableAmount()
         );
     }
 
@@ -40,9 +38,7 @@ public class FuelDto {
     }
 
     public static Fuel dtoToEntity(FuelDto fuelDto){
-        return new Fuel(
-                fuelDto.getId(),fuelDto.getType(),fuelDto.getCurrentPrice(),fuelDto.getCurrentAvailableAmount()
-        );
+        return new Fuel(fuelDto.getType(), fuelDto.getCurrentPrice());
     }
 
     public static List<Fuel> dtoToEntity(List<FuelDto> fuelDtos){

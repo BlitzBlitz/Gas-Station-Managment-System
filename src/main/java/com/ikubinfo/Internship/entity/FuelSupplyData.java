@@ -25,4 +25,10 @@ public class FuelSupplyData {
     @ManyToOne(fetch = FetchType.LAZY)
     private Financier boughtByFinancier;
 
+    public FuelSupplyData(Double suppliedAmount, Double suppliedPrice, Fuel fuelType, Financier boughtByFinancier) {
+        this.suppliedAmount = suppliedAmount;
+        this.suppliedPrice = suppliedPrice;
+        this.fuelType = fuelType;
+        this.boughtByFinancier = boughtByFinancier;
+    }
 }

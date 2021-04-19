@@ -71,12 +71,12 @@ public class AdminController {
     }
     @PostMapping("/{adminId}/fuels")
     public ResponseEntity<FuelDto> addFuel(@Valid @RequestBody FuelDto fuelDto){
-        Fuel saved = adminService.addFuel(FuelDto.dtoToEntity(fuelDto));
+        Fuel saved = adminService.addFuel(fuelDto);
         return new ResponseEntity<>(FuelDto.entityToDto(saved), HttpStatus.OK);
     }
     @PutMapping("/{adminId}/fuels/{fuelType}")
     public ResponseEntity<FuelDto> changePrice(@Valid @RequestBody PriceDataDto priceDataDto){
-        Fuel updated = adminService.changePrice(PriceDataDto.dtoToEntity(priceDataDto));
+        Fuel updated = adminService.changePrice(priceDataDto);
         return new ResponseEntity<FuelDto>(FuelDto.entityToDto(updated), HttpStatus.OK);
     }
     @DeleteMapping("/{adminId}/fuels/{fuelType}")
@@ -127,7 +127,7 @@ public class AdminController {
                 HttpStatus.OK);
     }
     @PostMapping("/{adminId}/financiers")
-    public ResponseEntity<FinancierDto> registerWorker(@Valid @RequestBody FinancierDto financierDto, @PathVariable Long adminId){
+    public ResponseEntity<FinancierDto> registerFinancier(@Valid @RequestBody FinancierDto financierDto, @PathVariable Long adminId){
         Financier saved = adminService.registerFinancier(FinancierDto.dtoToEntity(financierDto), adminId);
         return new ResponseEntity<FinancierDto>(FinancierDto.entityToDto(saved), HttpStatus.CREATED);
     }

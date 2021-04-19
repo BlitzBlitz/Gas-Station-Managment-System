@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class PriceDataService {
-    private PriceDataRepo priceDataRepo;
+    private final PriceDataRepo priceDataRepo;
 
     @Autowired
     public PriceDataService(PriceDataRepo priceDataRepo) {
@@ -18,13 +18,12 @@ public class PriceDataService {
     }
 
 
-
-
     @Transactional
-    public Fuel saveData(PriceData priceData){
-        Double newPrice = priceData.getPrice();
-        priceData.setPrice(priceData.getFuelType().getCurrentPrice());
-        priceData.getFuelType().setCurrentPrice(newPrice);
+    public Fuel saveData(PriceData priceData) {
+        Double newPrice = priceData.getPrice();                              //get new price
+        priceData.setPrice(priceData.getFuelType().getCurrentPrice());      //get old price
+
+        priceData.getFuelType().setCurrentPrice(newPrice);                  //
         priceDataRepo.save(priceData);
         return priceData.getFuelType();
     }

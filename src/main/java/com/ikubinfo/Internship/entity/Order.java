@@ -24,19 +24,15 @@ public class Order {
     private LocalDateTime orderDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private GasStation processedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     private Worker processedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Fuel fuelType;
 
-    public Order(Fuel fuelType, Double amount, Worker worker, Double total, GasStation processedAt) {
+    public Order(Fuel fuelType, Double amount, Worker worker, Double total) {
         this.fuelType = fuelType;
         this.amount = amount;
         this.processedBy = worker;
         this.total = total;
-        this.processedAt = processedAt;
     }
 }

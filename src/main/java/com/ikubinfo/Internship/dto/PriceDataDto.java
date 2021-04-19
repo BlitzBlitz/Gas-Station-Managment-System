@@ -31,7 +31,7 @@ public class PriceDataDto {
         PriceDataDto.fuelService = fuelService;
     }
 
-    @NotNull
+
     private Long id;
 
     @NotNull
@@ -45,7 +45,8 @@ public class PriceDataDto {
     @NotNull
     private String changedBy;
 
-    private Date changedAt;
+    private Date changeDate;
+
 
     public static PriceData dtoToEntity(PriceDataDto priceDataDto){
         return new PriceData(priceDataDto.getId(), priceDataDto.getPrice(), fuelService.getFuel(priceDataDto.getFuelType()),

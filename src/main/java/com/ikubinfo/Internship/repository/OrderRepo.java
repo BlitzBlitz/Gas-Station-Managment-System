@@ -17,7 +17,7 @@ public interface OrderRepo extends JpaRepository<Order,Long> {
             " GROUP BY DATE(order_date)",  nativeQuery = true)
     List<Object[]> findWorkerBalanceHistory(long worker_id);
 
-    @Query(value = "SELECT COUNT(*) FROM orders WHERE  DATE(order_date) =?1", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM orders WHERE DATE(order_date) = date ", nativeQuery = true)
     Integer countByOrderDate_Date(LocalDate date);
 
     @Query(value = "SELECT SUM(total) FROM orders WHERE DATE(order_date) =?1", nativeQuery = true)

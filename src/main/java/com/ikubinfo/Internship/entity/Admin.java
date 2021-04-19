@@ -29,7 +29,5 @@ public class Admin{
     List<Financier> financiers = new ArrayList<>();
     @OneToMany(mappedBy = "changedBy")
     List<PriceData> priceData = new ArrayList<>();
-    @OneToMany(mappedBy = "administratedBy")
-    List<GasStation> gasStations = new ArrayList<>();
 
 }

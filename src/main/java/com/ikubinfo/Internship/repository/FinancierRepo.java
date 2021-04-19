@@ -9,4 +9,6 @@ public interface FinancierRepo extends JpaRepository<Financier, Long> {
     List<Financier> getAllByAdmin_Id(Long adminId);
     Financier getByAdmin_IdAndId(Long adminId, Long financierId);
     Void deleteAllByAdmin_Id(Long adminId);
+    Financier getByUsername(String username);
+    Financier getById(Long id);
 }

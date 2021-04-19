@@ -22,8 +22,9 @@ public class Fuel {
     private String type;
     @Column(nullable = false)
     private Double currentPrice;
-    @Column(nullable = false)
-    private Double currentAvailableAmount;
+
+    @OneToOne( fetch = FetchType.LAZY)
+    private FuelDeposit fuelDeposit;
 
     @OneToMany(mappedBy = "fuelType")
     private final List<PriceData> priceHistory = new ArrayList<>();
@@ -36,11 +37,9 @@ public class Fuel {
 
     private boolean isDeleted = false;
 
-    public Fuel(Long id, String type, Double currentPrice, Double currentAvailableAmount) {
-        this.id = id;
+    public Fuel(String type, Double currentPrice) {
         this.type = type;
         this.currentPrice = currentPrice;
-        this.currentAvailableAmount = currentAvailableAmount;
     }
 
     @PreRemove

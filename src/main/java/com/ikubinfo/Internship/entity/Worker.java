@@ -1,11 +1,17 @@
 package com.ikubinfo.Internship.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Worker {
     @Id
     @GeneratedValue
@@ -21,14 +27,10 @@ public class Worker {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     private Admin admin;
 
     @OneToMany(mappedBy = "processedBy")
-    List<Order> orders = new ArrayList<>();
-
-    public Worker() {
-    }
+    private List<Order> orders = new ArrayList<>();
 
     public Worker(Long id, String name, String password, Double shiftBalance, Double salary) {
         this.id = id;
@@ -38,65 +40,4 @@ public class Worker {
         this.salary = salary;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getShiftBalance() {
-        return shiftBalance;
-    }
-
-    public void setShiftBalance(Double shiftBalance) {
-        this.shiftBalance = shiftBalance;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void addOrder(Order order) {
-        this.orders.add(order);
-    }
-
-    public void removeOrder(Order order) {
-        this.orders.remove(order);
-    }
-
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
-    }
-
-    public Double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Double salary) {
-        this.salary = salary;
-    }
 }

@@ -22,6 +22,7 @@ public class Financier {
     private String username;
     private String password;
     private Double salary;
+    private Double gasStationBalance = 0.0;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
@@ -34,14 +35,22 @@ public class Financier {
     @OneToMany(mappedBy = "boughtByFinancier")
     private List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "accountedBy", fetch = FetchType.LAZY)
-    private GasStation gasStations;
 
-    public Financier(Long id, String username, String password, Double salary, GasStation gasStations) {
+    public Financier(Long id, String username, String password, Double salary) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.salary = salary;
+    }
+
+    public Double invest(Double amount){
+        this.gasStationBalance += amount;
+        return this.gasStationBalance;
+    }
+
+    public Double collectShiftPayments(Double dailyPayment){
+        this.gasStationBalance += dailyPayment;
+        return this.gasStationBalance;
     }
 
 }

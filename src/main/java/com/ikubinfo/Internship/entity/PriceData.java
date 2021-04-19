@@ -21,8 +21,13 @@ public class PriceData{
     @ManyToOne(fetch = FetchType.LAZY)
     private Fuel fuelType;
     @ManyToOne(fetch = FetchType.LAZY)
-    Admin changedBy;
+    private Admin changedBy;
     @CreationTimestamp
     private Date priceChangedDate;
 
+    public PriceData(Double price, Fuel fuelType, Admin changedBy) {
+        this.price = price;
+        this.fuelType = fuelType;
+        this.changedBy = changedBy;
+    }
 }
