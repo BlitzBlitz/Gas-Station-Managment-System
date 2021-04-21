@@ -3,7 +3,6 @@ package com.ikubinfo.Internship.service;
 import com.ikubinfo.Internship.entity.Financier;
 import com.ikubinfo.Internship.entity.Worker;
 import com.ikubinfo.Internship.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -15,23 +14,12 @@ import java.util.List;
 @Service
 public class FinancierService {
 
-    private final WorkerService workerService;
-    private final OrderService orderService;
     private final FinancierRepo financierRepo;
-    private final FuelRepo fuelRepo;
-    private final FuelSupplyDataRepo fuelSupplyDataRepo;
     private final WorkerRepo workerRepo;
-    private final OrderRepo orderRepo;
 
-    @Autowired
-    public FinancierService(WorkerService workerService, OrderService orderService, FinancierRepo financierRepo, FuelRepo fuelRepo, FuelSupplyDataRepo fuelSupplyDataRepo, WorkerRepo workerRepo, OrderRepo orderRepo) {
-        this.workerService = workerService;
-        this.orderService = orderService;
+    public FinancierService(FinancierRepo financierRepo, WorkerRepo workerRepo) {
         this.financierRepo = financierRepo;
-        this.fuelRepo = fuelRepo;
-        this.fuelSupplyDataRepo = fuelSupplyDataRepo;
         this.workerRepo = workerRepo;
-        this.orderRepo = orderRepo;
     }
 
 
@@ -61,11 +49,8 @@ public class FinancierService {
         financierRepo.deleteAll();
     }
 
-    //Fuels & Gas Station
-
-
-    public Double invest(Double amount, Long financierId) {
-        Financier financier = financierRepo.getById(financierId);
+    public Double invest(Double amount, String financierName) {
+        Financier financier = financierRepo.getByUsername(financierName);
         if (financier == null) {
             throw new EntityNotFoundException("Financier not found");
         } else if (amount < 100) {
@@ -76,12 +61,9 @@ public class FinancierService {
         return currentBalance;
     }
 
-    //Workers
-
-
     @Transactional
-    public Double getShiftPayments(Long financierId) {                      //returns currentGasStationBalance
-        Financier financier = financierRepo.getById(financierId);
+    public Double getShiftPayments(String financierName) {                      //returns currentGasStationBalance
+        Financier financier = financierRepo.getByUsername(financierName);
         if(financier == null){
             throw new EntityNotFoundException("Financier not found");
         }

@@ -1,9 +1,7 @@
 package com.ikubinfo.Internship.controller;
 
 import com.ikubinfo.Internship.dto.AdminDto;
-import com.ikubinfo.Internship.dto.FinancierDto;
 import com.ikubinfo.Internship.entity.Admin;
-import com.ikubinfo.Internship.entity.Financier;
 import com.ikubinfo.Internship.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,14 +52,5 @@ public class AdminController {
     public void deleteAdmins(){
         adminService.deleteAllAdmins();
     }
-
-
-
-
-
-    //Financiers
-
-
-
 
 }

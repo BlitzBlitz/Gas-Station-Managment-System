@@ -24,12 +24,12 @@ public class StatisticsController {
         return new ResponseEntity<>(orderService.getYearlyStatistics(year), HttpStatus.OK);
     }
 
-    @GetMapping("/total")
+    @PostMapping("/total")
     public ResponseEntity<Double> getTotal(@RequestParam String getBy, @RequestBody LocalDate date) {
         return new ResponseEntity<>(orderService.getTotalBy(getBy, date), HttpStatus.OK);
     }
 
-    @GetMapping("/numberOfOrders")
+    @PostMapping("/numberOfOrders")
     public ResponseEntity<Integer> getDayNumberOfOrders(@RequestParam String getBy, @RequestBody LocalDate date) {
         return new ResponseEntity<>(orderService.getNumberOfOrdersBy(getBy, date), HttpStatus.OK);
     }

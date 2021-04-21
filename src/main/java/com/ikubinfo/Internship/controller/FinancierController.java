@@ -47,13 +47,12 @@ public class FinancierController {
     }
 
 
-
-    @PostMapping("/{financierId}/invest")
-    public ResponseEntity<Double> invest(@RequestBody Double investmentAmount, @PathVariable Long financierId){
-        return new ResponseEntity(financierService.invest(investmentAmount, financierId), HttpStatus.OK);
+    @PostMapping("/{financierName}/invest")
+    public ResponseEntity<Double> invest(@RequestBody Double investmentAmount, @PathVariable String financierName){
+        return new ResponseEntity(financierService.invest(investmentAmount, financierName), HttpStatus.OK);
     }
-    @PutMapping("/{financierId}/collectDailyTotal")
-    public ResponseEntity<Double> collectDailyTotal(@PathVariable Long financierId){
-        return new ResponseEntity(financierService.getShiftPayments(financierId), HttpStatus.OK);
+    @PutMapping("/{financierName}/collectDailyTotal")
+    public ResponseEntity<Double> collectDailyTotal(@PathVariable String financierName){
+        return new ResponseEntity(financierService.getShiftPayments(financierName), HttpStatus.OK);
     }
 }

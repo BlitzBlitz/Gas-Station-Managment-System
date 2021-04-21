@@ -16,9 +16,9 @@ import javax.validation.constraints.NotNull;
 public class FuelSupplyDataDto {
     @NotNull
     private String fuelType;
-    @Min(value = 0, message = "Negative price not allowed")
+    @Min(value = 1, message = "Price not allowed")
     private Double price;
-    @Min(value = 0, message = "Negative amount not allowed")
+    @Min(value = 1, message = "Amount not allowed")
     private Double amount;
     @NotNull
     private String boughtBy;

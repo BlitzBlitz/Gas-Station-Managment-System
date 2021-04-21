@@ -11,12 +11,10 @@ import java.util.List;
 @Service
 public class OrderService {
     private final OrderRepo orderRepo;
-    private final FuelService fuelService;
 
     @Autowired
-    public OrderService(OrderRepo orderRepo, FuelService fuelService) {
+    public OrderService(OrderRepo orderRepo) {
         this.orderRepo = orderRepo;
-        this.fuelService = fuelService;
     }
 
     public List<Object[]> getYearlyStatistics(int year) {
