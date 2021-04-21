@@ -32,8 +32,7 @@ public class Worker {
     @OneToMany(mappedBy = "processedBy")
     private List<Order> orders = new ArrayList<>();
 
-    public Worker(Long id, String name, String password, Double shiftBalance, Double salary) {
-        this.id = id;
+    public Worker(String name, String password, Double shiftBalance, Double salary) {
         this.name = name;
         this.password = password;
         this.shiftBalance = shiftBalance;

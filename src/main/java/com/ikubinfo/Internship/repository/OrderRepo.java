@@ -9,25 +9,47 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface OrderRepo extends JpaRepository<Order,Long> {
+public interface OrderRepo extends JpaRepository<Order, Long> {
 
     @Query(value = "SELECT DATE(order_date)" +
             "     , SUM(total) AS daily_total" +
-            "  FROM orders WHERE worker_id = ?1" +
-            " GROUP BY DATE(order_date)",  nativeQuery = true)
+            "  FROM orders WHERE processed_by_id = ?1" +
+            " GROUP BY DATE(order_date)", nativeQuery = true)
     List<Object[]> findWorkerBalanceHistory(long worker_id);
 
-    @Query(value = "SELECT COUNT(*) FROM orders WHERE DATE(order_date) = date ", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM orders WHERE DATE(order_date) = ?1 ", nativeQuery = true)
     Integer countByOrderDate_Date(LocalDate date);
 
+    @Query(value = "SELECT COUNT(*) FROM orders WHERE extract(year from order_date) =?1 and extract(month from order_date) =?2 ", nativeQuery = true)
+    Integer countByOrderDate_Month(int year, int month);
+
+    @Query(value = "SELECT COUNT(*) FROM orders WHERE extract(year from order_date) =?1", nativeQuery = true)
+    Integer countByOrderDate_Year(int year);
+
     @Query(value = "SELECT SUM(total) FROM orders WHERE DATE(order_date) =?1", nativeQuery = true)
-    Double countTotalOfDay(LocalDate date);
+    Double getTotalOfDay(LocalDate date);
 
     @Query(value = "SELECT SUM(total) FROM orders WHERE extract(year from order_date) =?1 and extract(month from order_date) =?2", nativeQuery = true)
-    Object countTotalOfMonth(int year, int month);
+    Double getTotalOfMonth(int year, int month);
 
     @Query(value = "SELECT SUM(total) FROM orders WHERE extract(year from order_date) =?1  ", nativeQuery = true)
-    Object countTotalOfYear(int year);
+    Double getTotalOfYear(int year);
 
-    List<Object[]>  getAllMonthlyTotalsOrderByTotal(int year);
+    @Query(value = "SELECT extract(year from order_date) as order_year, " +
+            "extract(month from order_date) as order_month, " +
+            "SUM(total) AS monthly_total " +
+            "FROM orders WHERE  extract(year from order_date) =?1 " +
+            "GROUP BY order_year, order_month " +
+            "ORDER BY monthly_total DESC", nativeQuery = true)
+    List<Object[]> getAllMonthlyTotalsOrderByTotal(int year);
+
+    @Query(value = "SELECT SUM(total) as hour_total, extract (hour from order_date) as order_hour "+
+            "FROM orders "+
+            "WHERE DATE(order_date) = ?1 "+
+            "GROUP BY extract(hour from order_date)"+
+            "ORDER BY hour_total DESC "+
+            "LIMIT 1", nativeQuery = true)
+    List<Object[]> getPeakHourForDate(LocalDate date);
+
+
 }

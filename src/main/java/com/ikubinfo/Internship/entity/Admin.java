@@ -25,8 +25,6 @@ public class Admin{
 
     @OneToMany(mappedBy = "admin")
     List<Worker> workers = new ArrayList<>();
-    @OneToMany(mappedBy = "admin")
-    List<Financier> financiers = new ArrayList<>();
     @OneToMany(mappedBy = "changedBy")
     List<PriceData> priceData = new ArrayList<>();
 

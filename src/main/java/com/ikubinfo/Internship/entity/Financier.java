@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +27,6 @@ public class Financier {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
-    private Admin admin;
 
     @OneToMany(mappedBy = "boughtByFinancier")
     private List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();

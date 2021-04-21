@@ -8,11 +8,11 @@ import java.util.List;
 
 @Repository
 public interface WorkerRepo extends JpaRepository<Worker, Long > {
-    Worker findByName(String name);
-    List<Worker> getAllByAdmin_Id(Long adminId);
-    Worker getByAdmin_IdAndId(Long adminId, Long workerId);
-    Void deleteAllByAdmin_Id(Long adminId);
+    List<Worker> getAllByAdmin_Name(String adminId);
+    Void deleteByName(String adminId);
     Worker getByName(String name);
     List<Worker> findAll();
     Worker getById(Long workerId);
+    Boolean existsByName(String name);
+
 }

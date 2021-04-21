@@ -17,9 +17,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class WorkerDto {
 
-
     @NotNull
-    private Long id;
+    String administratedBy;
 
     @NotNull
     @Size(min = 2, message = "username should be longer than 2 char")
@@ -42,13 +41,13 @@ public class WorkerDto {
 
     public static WorkerDto entityToDto(Worker worker){
         return new WorkerDto(
-                worker.getId(), worker.getName(), null, worker.getShiftBalance(), worker.getSalary()
+                worker.getAdmin().getName(), worker.getName(), null, worker.getShiftBalance(), worker.getSalary()
         );
     }
 
     public static Worker dtoToWorker(WorkerDto workerDto){
         return new Worker(
-                workerDto.getId(), workerDto.getName(), workerDto.getPassword(),
+                workerDto.getName(), workerDto.getPassword(),
                 workerDto.getShiftBalance(), workerDto.getSalary()
         );
     }
