@@ -28,24 +28,21 @@ public class FinancierController {
     }
     @PostMapping
     public ResponseEntity<FinancierDto> registerFinancier(@Valid @RequestBody FinancierDto financierDto){
-        Financier saved = financierService.registerFinancier(FinancierDto.dtoToEntity(financierDto));
+        Financier saved = financierService.registerFinancier(financierDto);
         return new ResponseEntity<>(FinancierDto.entityToDto(saved), HttpStatus.CREATED);
     }
     @PutMapping("/{financierName}")
     public ResponseEntity<FinancierDto> updateFinancier(@Valid @RequestBody FinancierDto financierDto){
-        Financier updatedFinancier = financierService.updateFinancier(FinancierDto.dtoToEntity(financierDto));
+        Financier updatedFinancier = financierService.updateFinancier(financierDto);
         return new ResponseEntity<>(FinancierDto.entityToDto(updatedFinancier),
                 HttpStatus.OK);
     }
     @DeleteMapping("/{financierName}")
-    public void deleteFinancier(@PathVariable String financierName){
-        financierService.deleteFinancierByName(financierName);
-    }
-    @DeleteMapping
-    public void deleteAllFinanciers(){
-        financierService.deleteAllFinanciers();
-    }
+    public ResponseEntity<Integer> deleteFinancier(@PathVariable String financierName){
 
+        return new ResponseEntity<>(financierService.deleteFinancierByName(financierName),
+                HttpStatus.OK);
+    }
 
     @PostMapping("/{financierName}/invest")
     public ResponseEntity<Double> invest(@RequestBody Double investmentAmount, @PathVariable String financierName){

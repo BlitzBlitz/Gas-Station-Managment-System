@@ -56,7 +56,7 @@ public class FuelService {
     @Transactional
     public Fuel changePrice(PriceDataDto priceDataDto) throws EntityNotFoundException {
         Fuel fuel = fuelRepo.getByType(priceDataDto.getFuelType());         //select fuel by name
-        Admin admin = adminRepo.getByName(priceDataDto.getChangedBy());
+        Admin admin = adminRepo.getByAdminDetails_Username(priceDataDto.getChangedBy());
         if (fuel == null) {
             throw new EntityNotFoundException("Fuel does not exist");
         } else if (admin == null) {
@@ -103,7 +103,7 @@ public class FuelService {
 
     @Transactional
     public FuelSupplyData supplyFuel(FuelSupplyDataDto fuelSupplyDataDto) throws PersistenceException {
-        Financier financier = financierRepo.getByUsername(fuelSupplyDataDto.getBoughtBy());
+        Financier financier = financierRepo.getByFinancierDetails_Username(fuelSupplyDataDto.getBoughtBy());
         Fuel fuel = fuelRepo.getByType(fuelSupplyDataDto.getFuelType());
         if (financier == null) {
             throw new EntityNotFoundException("Financier not found");

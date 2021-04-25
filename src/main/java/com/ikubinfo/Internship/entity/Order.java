@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Table(name = "orders")              //  !!! postgres has the name "order" reserved
 @Data
 @NoArgsConstructor
-public class Order {
+public class Order implements Serializable {
     @Id
     @GeneratedValue
     private Long id;

@@ -28,7 +28,7 @@ public class FuelSupplyDataDto {
         fuelSupplyDataDto.fuelType = fuelSupplyData.getFuelType().getType();
         fuelSupplyDataDto.price = fuelSupplyData.getSuppliedPrice();
         fuelSupplyDataDto.amount = fuelSupplyData.getSuppliedAmount();
-        fuelSupplyDataDto.boughtBy = fuelSupplyData.getBoughtByFinancier().getUsername();
+        fuelSupplyDataDto.boughtBy = fuelSupplyData.getBoughtByFinancier().getFinancierDetails().getUsername();
         return fuelSupplyDataDto;
     }
 }

@@ -58,7 +58,7 @@ public class PriceDataDto {
 
     public static PriceDataDto entityToDto(PriceData priceData){
         return new PriceDataDto(priceData.getId(), priceData.getPrice(), priceData.getFuelType().getType(),
-                priceData.getChangedBy().getName(), priceData.getPriceChangedDate());
+                priceData.getChangedBy().getAdminDetails().getUsername(), priceData.getPriceChangedDate());
     }
     public static List<PriceDataDto> entityToDto(List<PriceData> priceDataList){
         return priceDataList.stream().map(priceData -> entityToDto(priceData)).collect(Collectors.toList());

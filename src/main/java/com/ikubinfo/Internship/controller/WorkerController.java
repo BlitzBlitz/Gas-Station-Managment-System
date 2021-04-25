@@ -25,8 +25,8 @@ public class WorkerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WorkerDto>> getWorkers(@RequestParam String adminName){
-        return new ResponseEntity<>(WorkerDto.entityToDto(workerService.getWorkersOfAdmin(adminName)),
+    public ResponseEntity<List<WorkerDto>> getWorkers(){
+        return new ResponseEntity<>(WorkerDto.entityToDto(workerService.getWorkersOfAdmin()),
                 HttpStatus.OK);
     }
     @GetMapping("/{workerName}")
@@ -49,11 +49,6 @@ public class WorkerController {
     public void deleteWorker(@PathVariable String workerName){
         workerService.deleteWorker(workerName);
     }
-    @DeleteMapping
-    public void deleteAllWorkers(@RequestParam String adminName){
-        workerService.deleteAllWorkers(adminName);
-    }
-
 
     @GetMapping("/{workerName}/shiftBalance")
     public ResponseEntity<Double> getShiftBalance(@PathVariable String workerName){

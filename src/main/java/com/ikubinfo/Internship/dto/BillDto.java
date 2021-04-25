@@ -21,7 +21,7 @@ public class BillDto {
         this.fuelType = order.getFuelType().getType();
         this.amount = order.getAmount();
         this.total = order.getTotal();
-        this.processedBy = order.getProcessedBy().getName();
+        this.processedBy = order.getProcessedBy().getWorkerDetails().getUsername();
         this.processAtTime = order.getOrderDate();
     }
 }

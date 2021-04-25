@@ -2,15 +2,17 @@ package com.ikubinfo.Internship.service;
 
 import com.ikubinfo.Internship.dto.BillDto;
 import com.ikubinfo.Internship.dto.OrderDto;
+import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.dto.WorkerDto;
-import com.ikubinfo.Internship.entity.Admin;
 import com.ikubinfo.Internship.entity.Fuel;
 import com.ikubinfo.Internship.entity.Order;
+import com.ikubinfo.Internship.entity.User;
 import com.ikubinfo.Internship.entity.Worker;
-import com.ikubinfo.Internship.repository.AdminRepo;
 import com.ikubinfo.Internship.repository.OrderRepo;
+import com.ikubinfo.Internship.repository.UserRepo;
 import com.ikubinfo.Internship.repository.WorkerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -28,62 +30,70 @@ public class WorkerService {
     private final OrderService orderService;
     private final FuelService fuelService;
     private final OrderRepo orderRepo;
-    private final AdminRepo adminRepo;
+    private final RegistrationService registrationService;
+    private final UserRepo userRepo;
 
     @Autowired
-    public WorkerService(WorkerRepo workerRepo, OrderService orderService, FuelService fuelService, OrderRepo orderRepo, AdminRepo adminRepo) {
+    public WorkerService(WorkerRepo workerRepo, OrderService orderService, FuelService fuelService,
+                         OrderRepo orderRepo, RegistrationService registrationService, UserRepo userRepo) {
         this.workerRepo = workerRepo;
         this.orderService = orderService;
         this.fuelService = fuelService;
         this.orderRepo = orderRepo;
-        this.adminRepo = adminRepo;
+        this.registrationService = registrationService;
+        this.userRepo = userRepo;
     }
 
-    public Worker registerWorker(WorkerDto newWorker) throws EntityExistsException {
-        Admin admin = adminRepo.getByName(newWorker.getAdministratedBy());
-        if(admin == null){
-            throw new EntityNotFoundException("Admin does not exist");
-        }else if (workerRepo.existsByName(newWorker.getName())) {
+    public Worker registerWorker(WorkerDto workerDto) throws EntityExistsException {
+        if (workerRepo.existsByWorkerDetails_Username(workerDto.getName())) {        //exists
             throw new EntityExistsException("Worker already exists");
         }
-        Worker worker = WorkerDto.dtoToWorker(newWorker);
-        worker.setAdmin(admin);
+
+        Worker oldWorker = workerRepo.getFromHistory(workerDto.getName());                  //exists in history
+        if(oldWorker != null){
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            oldWorker.setDeleted(false);
+            oldWorker.getWorkerDetails().setPassword(passwordEncoder.encode(workerDto.getPassword()));
+            return workerRepo.save(oldWorker);
+        }
+
+        Worker worker = WorkerDto.dtoToWorker(workerDto);                                   //new
+        User user = registrationService.registerUser(new UserDto(
+                workerDto.getName(), workerDto.getPassword(), "WORKER"
+        ));
+        worker.setWorkerDetails(user);
         return workerRepo.save(worker);
     }
 
-    public List<Worker> getWorkersOfAdmin(String adminName) {
-        return workerRepo.getAllByAdmin_Name(adminName);
+    public List<Worker> getWorkersOfAdmin() {
+        return workerRepo.findAll();
     }
 
     public Worker getWorker(String workerName) {
-        return workerRepo.getByName(workerName);
+        return workerRepo.getByWorkerDetails_Username(workerName);
     }
 
     public Worker updateWorker(WorkerDto workerDto) throws EntityNotFoundException {
-        Admin admin = adminRepo.getByName(workerDto.getName());
-        if(admin == null){
-            throw new EntityNotFoundException("Admin not found");
-        }else if (!workerRepo.existsByName(workerDto.getName())) {
+        if (!workerRepo.existsByWorkerDetails_Username(workerDto.getName())) {
             throw new EntityNotFoundException("Worker not found");
         }
         Worker worker = WorkerDto.dtoToWorker(workerDto);
-        worker.setAdmin(admin);
+        User user = userRepo.getByUsername(workerDto.getName());
+        user.setPassword(workerDto.getPassword());
+        worker.setWorkerDetails(user);
         return workerRepo.save(worker);
     }
 
     public void deleteWorker(String workerName) {
-        workerRepo.deleteByName(workerName);
+        workerRepo.deleteByWorkerDetails_Username(workerName);
     }
 
-    public void deleteAllWorkers(String adminName) {
-        workerRepo.getAllByAdmin_Name(adminName);
-    }
 
     public Map<String, Double> getWorkersBalances() {
         List<Worker> workerList = workerRepo.findAll();
         Map<String, Double> workersBalances = new HashMap<>();
         for (Worker w : workerList) {
-            workersBalances.put(w.getName(), w.getShiftBalance());
+            workersBalances.put(w.getWorkerDetails().getUsername(), w.getShiftBalance());
         }
         return workersBalances;
     }
@@ -91,7 +101,7 @@ public class WorkerService {
     @Transactional
     public BillDto processOrder(String workerName, OrderDto orderDto) throws PersistenceException {
         Fuel fuel = fuelService.getFuel(orderDto.getFuelType());
-        Worker worker = workerRepo.getByName(workerName);
+        Worker worker = workerRepo.getByWorkerDetails_Username(workerName);
         if (fuel == null) {
             throw new PersistenceException("Order not processed. No such fuel type found");
         } else if (worker == null) {
@@ -104,7 +114,7 @@ public class WorkerService {
     }
 
     public Double getShiftBalance(String workerName) throws EntityNotFoundException {
-        Worker worker = workerRepo.getByName(workerName);
+        Worker worker = workerRepo.getByWorkerDetails_Username(workerName);
         if (worker == null) {
             throw new EntityNotFoundException("Worker not found");
         }
@@ -112,7 +122,7 @@ public class WorkerService {
     }
 
     public List<Object[]> getShiftBalanceHistory(String workerName) {
-        Worker worker = workerRepo.getByName(workerName);
+        Worker worker = workerRepo.getByWorkerDetails_Username(workerName);
         if (worker == null) {
             throw new EntityNotFoundException("Worker not found");
         }

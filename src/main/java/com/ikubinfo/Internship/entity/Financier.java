@@ -3,9 +3,12 @@ package com.ikubinfo.Internship.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,31 +16,30 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Financier {
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "update financier set is_deleted = true where id=?")
+public class Financier implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
     @Column(nullable = false, unique = true)
-    private String username;
-    private String password;
     private Double salary;
     private Double gasStationBalance = 0.0;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    private boolean isDeleted = false;
+
+    @ManyToOne
+    @JoinColumn(name = "username",referencedColumnName = "username")
+    @Where(clause = "enabled = 1")
+    private User financierDetails;
 
 
     @OneToMany(mappedBy = "boughtByFinancier")
     private List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();
 
-
-    public Financier(Long id, String username, String password, Double salary) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.salary = salary;
-    }
 
     public Double invest(Double amount){
         this.gasStationBalance += amount;

@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PriceData{
+public class PriceData implements Serializable {
     @Id
     @GeneratedValue
     private Long id;

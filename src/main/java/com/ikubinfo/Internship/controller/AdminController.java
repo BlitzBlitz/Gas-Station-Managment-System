@@ -1,6 +1,7 @@
 package com.ikubinfo.Internship.controller;
 
 import com.ikubinfo.Internship.dto.AdminDto;
+import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.entity.Admin;
 import com.ikubinfo.Internship.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,30 +28,26 @@ public class AdminController {
     @GetMapping
     public ResponseEntity<List<AdminDto>> getAdmins(){
         List<Admin> adminList = adminService.getAllAdmins();
-        return new ResponseEntity<List<AdminDto>>(AdminDto.entityToDto(adminList), HttpStatus.OK);
+        return new ResponseEntity<>(AdminDto.entityToDto(adminList), HttpStatus.OK);
     }
-    @GetMapping("/{adminId}")
-    public  ResponseEntity<AdminDto> getAdmin(@PathVariable long adminId){
-        Admin admin = adminService.getAdmin(adminId);
-        return new ResponseEntity<AdminDto>(AdminDto.entityToDto(admin), HttpStatus.OK);
+    @GetMapping("/{adminName}")
+    public  ResponseEntity<AdminDto> getAdmin(@PathVariable String adminName){
+        Admin admin = adminService.getAdmin(adminName);
+        return new ResponseEntity<>(AdminDto.entityToDto(admin), HttpStatus.OK);
     }
-    @PostMapping
-    public ResponseEntity<AdminDto> registerAdmin(@Valid @RequestBody AdminDto adminDto){
-        Admin saved = adminService.registerAdmin(AdminDto.dtoToEntity(adminDto));
-        return new ResponseEntity<AdminDto>(AdminDto.entityToDto(saved), HttpStatus.CREATED);
+    @PostMapping("/register")
+    public ResponseEntity<AdminDto> registerAdmin(@Valid @RequestBody UserDto userDto){
+        Admin saved = adminService.registerAdmin(userDto);
+        return new ResponseEntity<>(AdminDto.entityToDto(saved), HttpStatus.CREATED);
     }
-    @PutMapping("/{adminId}")
+    @PutMapping("/{adminName}")
     public  ResponseEntity<AdminDto> updateAdmin(@Valid @RequestBody AdminDto adminDto){
-        Admin admin = adminService.updateAdmin(AdminDto.dtoToEntity(adminDto));
-        return new ResponseEntity<AdminDto>(AdminDto.entityToDto(admin), HttpStatus.OK);
+        Admin admin = adminService.updateAdmin(adminDto);
+        return new ResponseEntity<>(AdminDto.entityToDto(admin), HttpStatus.OK);
     }
-    @DeleteMapping("/{adminId}")
-    public void deleteAdmin(@PathVariable Long adminId){
-        adminService.deleteAdmin(adminId);
-    }
-    @DeleteMapping
-    public void deleteAdmins(){
-        adminService.deleteAllAdmins();
+    @DeleteMapping("/{adminName}")
+    public void deleteAdmin(@PathVariable String adminName){
+        adminService.deleteAdmin(adminName);
     }
 
 }

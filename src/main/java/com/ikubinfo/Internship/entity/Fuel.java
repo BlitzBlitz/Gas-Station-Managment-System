@@ -6,6 +6,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @SQLDelete(sql = "update fuel set is_deleted = true where id=?")
 @Where(clause = "is_deleted = false")
-public class Fuel {
+public class Fuel implements Serializable {
     @Id
     @GeneratedValue
     Long id;
