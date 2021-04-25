@@ -5,7 +5,6 @@ import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.entity.Admin;
 import com.ikubinfo.Internship.entity.User;
 import com.ikubinfo.Internship.repository.AdminRepo;
-import com.ikubinfo.Internship.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,13 +20,11 @@ import java.util.stream.StreamSupport;
 @Service
 public class AdminService {
     private final AdminRepo adminRepo;
-    private final UserRepo userRepo;
     private final RegistrationService registrationService;
 
     @Autowired
-    public AdminService(AdminRepo adminRepo, UserRepo userRepo, RegistrationService registrationService) {
+    public AdminService(AdminRepo adminRepo, RegistrationService registrationService) {
         this.adminRepo = adminRepo;
-        this.userRepo = userRepo;
         this.registrationService = registrationService;
     }
 
