@@ -8,6 +8,8 @@ import com.ikubinfo.Internship.entity.Fuel;
 import com.ikubinfo.Internship.entity.Order;
 import com.ikubinfo.Internship.entity.User;
 import com.ikubinfo.Internship.entity.Worker;
+import com.ikubinfo.Internship.exception.ExistsReqException;
+import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.OrderRepo;
 import com.ikubinfo.Internship.repository.UserRepo;
 import com.ikubinfo.Internship.repository.WorkerRepo;
@@ -43,10 +45,10 @@ public class WorkerService {
         this.registrationService = registrationService;
         this.userRepo = userRepo;
     }
-
+    @Transactional
     public Worker registerWorker(WorkerDto workerDto) throws EntityExistsException {
         if (workerRepo.existsByWorkerDetails_Username(workerDto.getName())) {        //exists
-            throw new EntityExistsException("Worker already exists");
+            throw new ExistsReqException("Worker already exists");
         }
 
         Worker oldWorker = workerRepo.getFromHistory(workerDto.getName());                  //exists in history
@@ -65,17 +67,25 @@ public class WorkerService {
         return workerRepo.save(worker);
     }
 
-    public List<Worker> getWorkersOfAdmin() {
-        return workerRepo.findAll();
+    public List<Worker> getWorkers() {
+        List<Worker> all = workerRepo.findAll();
+        if(all.isEmpty()){
+            throw new NotFoundReqException("No workers found");
+        }
+        return all;
     }
 
     public Worker getWorker(String workerName) {
-        return workerRepo.getByWorkerDetails_Username(workerName);
+        Worker worker = workerRepo.getByWorkerDetails_Username(workerName);
+        if(worker == null){
+            throw new NotFoundReqException("Worker not found");
+        }
+        return worker;
     }
-
+    @Transactional
     public Worker updateWorker(WorkerDto workerDto) throws EntityNotFoundException {
         if (!workerRepo.existsByWorkerDetails_Username(workerDto.getName())) {
-            throw new EntityNotFoundException("Worker not found");
+            throw new NotFoundReqException("Worker not found");
         }
         Worker worker = WorkerDto.dtoToWorker(workerDto);
         User user = userRepo.getByUsername(workerDto.getName());
@@ -83,9 +93,12 @@ public class WorkerService {
         worker.setWorkerDetails(user);
         return workerRepo.save(worker);
     }
-
+    @Transactional
     public void deleteWorker(String workerName) {
-        workerRepo.deleteByWorkerDetails_Username(workerName);
+        Integer result = workerRepo.deleteByWorkerDetails_Username(workerName);
+        if(result == 0){
+            throw new NotFoundReqException("Worker does not exist");
+        }
     }
 
 
@@ -103,9 +116,9 @@ public class WorkerService {
         Fuel fuel = fuelService.getFuel(orderDto.getFuelType());
         Worker worker = workerRepo.getByWorkerDetails_Username(workerName);
         if (fuel == null) {
-            throw new PersistenceException("Order not processed. No such fuel type found");
+            throw new NotFoundReqException("Order not processed. No such fuel type found");
         } else if (worker == null) {
-            throw new PersistenceException("Order not processed. Worker not found");
+            throw new NotFoundReqException("Order not processed. Worker not found");
         }
         Double total = fuelService.buyFuel(fuel, orderDto.getAmount());        //decreases the available amount from deposit, returns amountBought* currentPrice, throws exc if not enough amount
         Order order = orderRepo.save(new Order(fuel, orderDto.getAmount(), worker, total, LocalDateTime.now()));
@@ -116,7 +129,7 @@ public class WorkerService {
     public Double getShiftBalance(String workerName) throws EntityNotFoundException {
         Worker worker = workerRepo.getByWorkerDetails_Username(workerName);
         if (worker == null) {
-            throw new EntityNotFoundException("Worker not found");
+            throw new NotFoundReqException("Worker not found");
         }
         return worker.getShiftBalance();
     }
@@ -124,7 +137,7 @@ public class WorkerService {
     public List<Object[]> getShiftBalanceHistory(String workerName) {
         Worker worker = workerRepo.getByWorkerDetails_Username(workerName);
         if (worker == null) {
-            throw new EntityNotFoundException("Worker not found");
+            throw new NotFoundReqException("Worker not found");
         }
         return orderService.getWorkerBalanceHistory(worker.getId());
     }

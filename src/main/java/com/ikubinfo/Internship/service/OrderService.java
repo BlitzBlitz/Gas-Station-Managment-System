@@ -1,10 +1,10 @@
 package com.ikubinfo.Internship.service;
 
+import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class OrderService {
         }else if(getBy.equalsIgnoreCase("year")){
             return orderRepo.countByOrderDate_Year(date.getYear());
         }
-        throw new EntityNotFoundException("Wrong filter! Must be one of the following: day, month, year");
+        throw new NotFoundReqException("Wrong filter! Must be one of the following: day, month, year");
     }
 
     public Double getTotalBy(String getBy, LocalDate date) {
@@ -44,6 +44,6 @@ public class OrderService {
         }else if(getBy.equalsIgnoreCase("year")){
             return orderRepo.getTotalOfYear(date.getYear());
         }
-        throw new EntityNotFoundException("Wrong filter! Must be one of the following: day, month, year");
+        throw new NotFoundReqException("Wrong filter! Must be one of the following: day, month, year");
     }
 }

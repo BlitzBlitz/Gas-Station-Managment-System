@@ -1,15 +1,17 @@
 package com.ikubinfo.Internship.repository;
 
 import com.ikubinfo.Internship.entity.Order;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Profile("dev")
 @Repository
 public interface OrderRepo extends JpaRepository<Order, Long> {
+
 
     @Query(value = "SELECT DATE(order_date)" +
             "     , SUM(total) AS daily_total" +

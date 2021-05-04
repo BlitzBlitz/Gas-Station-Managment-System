@@ -5,6 +5,8 @@ import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.entity.Financier;
 import com.ikubinfo.Internship.entity.User;
 import com.ikubinfo.Internship.entity.Worker;
+import com.ikubinfo.Internship.exception.InvalidReqException;
+import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.FinancierRepo;
 import com.ikubinfo.Internship.repository.WorkerRepo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -32,15 +32,20 @@ public class FinancierService {
 
 
     public Financier getFinancier(String financierName) {
-        return financierRepo.getByFinancierDetails_Username(financierName);
+        Financier financier = financierRepo.getByFinancierDetails_Username(financierName);
+        if (financier == null) {
+            throw new NotFoundReqException("Financier not found");
+        }
+        return financier;
     }
+
     @Transactional
     public Financier registerFinancier(FinancierDto financierDto) {
         if (financierRepo.existsByFinancierDetails_Username(financierDto.getUsername())) {                      //exists
             throw new EntityExistsException("Financier already exists");
         }
         Financier oldFinancier = financierRepo.getFromHistory(financierDto.getUsername());
-        if(oldFinancier != null){                                                                           //exists in history
+        if (oldFinancier != null) {                                                                           //exists in history
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             oldFinancier.setDeleted(false);
             oldFinancier.getFinancierDetails().setPassword(passwordEncoder.encode(financierDto.getPassword()));
@@ -55,10 +60,11 @@ public class FinancierService {
         financier.setSalary(financierDto.getSalary());
         return financierRepo.save(financier);
     }
+
     @Transactional
     public Financier updateFinancier(FinancierDto financierDto) {
         if (!financierRepo.existsByFinancierDetails_Username(financierDto.getUsername())) {
-            throw new EntityNotFoundException("Financier does not exists");
+            throw new NotFoundReqException("Financier does not exists");
         }
         Financier financier = financierRepo.getByFinancierDetails_Username(financierDto.getUsername());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -66,6 +72,7 @@ public class FinancierService {
         financier.setSalary(financierDto.getSalary());
         return financierRepo.save(financier);
     }
+
     @Transactional
     public int deleteFinancierByName(String financierName) {
         return financierRepo.deleteByFinancierDetails_Username(financierName);
@@ -75,9 +82,9 @@ public class FinancierService {
     public Double invest(Double amount, String financierName) {
         Financier financier = financierRepo.getByFinancierDetails_Username(financierName);
         if (financier == null) {
-            throw new EntityNotFoundException("Financier not found");
+            throw new NotFoundReqException("Financier not found");
         } else if (amount < 100) {
-            throw new PersistenceException("Minimal investment amount is 100$");
+            throw new InvalidReqException("Minimal investment amount is 100$");
         }
         Double currentBalance = financier.invest(amount);
         financierRepo.save(financier);
@@ -87,8 +94,8 @@ public class FinancierService {
     @Transactional
     public Double getShiftPayments(String financierName) {                      //returns currentGasStationBalance
         Financier financier = financierRepo.getByFinancierDetails_Username(financierName);
-        if(financier == null){
-            throw new EntityNotFoundException("Financier not found");
+        if (financier == null) {
+            throw new NotFoundReqException("Financier not found");
         }
         Double dailyTotal = 0.0;
         List<Worker> workers = workerRepo.findAll();

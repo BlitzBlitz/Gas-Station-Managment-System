@@ -4,6 +4,8 @@ import com.ikubinfo.Internship.dto.AdminDto;
 import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.entity.Admin;
 import com.ikubinfo.Internship.entity.User;
+import com.ikubinfo.Internship.exception.ExistsReqException;
+import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.AdminRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,9 +36,9 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
-    public Admin getAdmin(String adminName) throws EntityNotFoundException {
+    public Admin getAdmin(String adminName){
         if (!adminRepo.existsByAdminDetails_Username(adminName)) {
-            throw new EntityNotFoundException("Admin not found");
+            throw new NotFoundReqException("Admin not found");
         }
         return adminRepo.getByAdminDetails_Username(adminName);
     }
@@ -47,7 +49,7 @@ public class AdminService {
 
     public Admin registerAdmin(UserDto userDto) throws EntityExistsException {
         if(adminRepo.existsByAdminDetails_Username(userDto.getUsername())){            //exists
-            throw new EntityExistsException("Admin already exists");
+            throw new ExistsReqException("Admin already exists");
         }
         Admin oldAdmin = adminRepo.getFromHistory(userDto.getUsername());                  //exists in history
         if(oldAdmin != null){
@@ -64,7 +66,7 @@ public class AdminService {
 
     public Admin updateAdmin(AdminDto adminDto) throws EntityNotFoundException {
         if (!adminRepo.existsByAdminDetails_Username(adminDto.getName())) {
-            throw new EntityNotFoundException("Admin does not exist");
+            throw new NotFoundReqException("Admin does not exist");
         }
         Admin admin = adminRepo.getByAdminDetails_Username(adminDto.getName());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

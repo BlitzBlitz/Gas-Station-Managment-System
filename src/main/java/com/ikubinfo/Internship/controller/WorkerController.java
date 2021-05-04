@@ -9,14 +9,13 @@ import com.ikubinfo.Internship.service.WorkerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("workers")
 public class WorkerController {
     private final WorkerService workerService;
@@ -28,7 +27,7 @@ public class WorkerController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<WorkerDto>> getWorkers(){
-        return new ResponseEntity<>(WorkerDto.entityToDto(workerService.getWorkersOfAdmin()),
+        return new ResponseEntity<>(WorkerDto.entityToDto(workerService.getWorkers()),
                 HttpStatus.OK);
     }
     @GetMapping("/{workerName}")
@@ -62,8 +61,8 @@ public class WorkerController {
         return new ResponseEntity<>(workerService.getShiftBalance(workerName), HttpStatus.OK);
     }
     @GetMapping("/{workerName}/shiftHistory")
-    @PreAuthorize("hasRole('WORKER')")
-    public ResponseEntity<List<Object[]>> getHistory(@PathVariable String workerName){
+    @PreAuthorize("hasAnyRole('ADMIN', 'WORKER')")
+    public ResponseEntity<List<Object[]>> getShiftsHistory(@PathVariable String workerName){
         return new ResponseEntity<>(workerService.getShiftBalanceHistory(workerName), HttpStatus.OK);
     }
     @PostMapping("/{workerName}/processOrder")

@@ -8,13 +8,12 @@ import com.ikubinfo.Internship.service.FuelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("fuels")
 public class FuelController {
     private final FuelService fuelService;
@@ -50,9 +49,9 @@ public class FuelController {
         Fuel updated = fuelService.changePrice(priceDataDto);
         return new ResponseEntity<>(FuelDto.entityToDto(updated), HttpStatus.OK);
     }
-    @DeleteMapping
+    @DeleteMapping("/{fuelType}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteFuel(@RequestParam String fuelType){
+    public void deleteFuel(@PathVariable String fuelType){
         fuelService.deleteFuel(fuelType);
     }
 

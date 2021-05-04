@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Controller
+@RestController
 @RequestMapping("/financiers")
 public class FinancierController {
 
@@ -22,18 +22,20 @@ public class FinancierController {
     }
 
 
-    @GetMapping("/{financierName}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'FINANCIER')")
-    public ResponseEntity<FinancierDto> getFinancier(@PathVariable String financierName){
-        return new ResponseEntity<FinancierDto>(FinancierDto.entityToDto(financierService.getFinancier(financierName)),
-                HttpStatus.OK);
-    }
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<FinancierDto> registerFinancier(@Valid @RequestBody FinancierDto financierDto){
         Financier saved = financierService.registerFinancier(financierDto);
         return new ResponseEntity<>(FinancierDto.entityToDto(saved), HttpStatus.CREATED);
     }
+
+    @GetMapping("/{financierName}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FINANCIER')")
+    public ResponseEntity<FinancierDto> getFinancier(@PathVariable String financierName){
+        return new ResponseEntity<FinancierDto>(FinancierDto.entityToDto(financierService.getFinancier(financierName)),
+                HttpStatus.OK);
+    }
+
     @PutMapping("/{financierName}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<FinancierDto> updateFinancier(@Valid @RequestBody FinancierDto financierDto){
@@ -54,7 +56,7 @@ public class FinancierController {
     public ResponseEntity<Double> invest(@RequestBody Double investmentAmount, @PathVariable String financierName){
         return new ResponseEntity(financierService.invest(investmentAmount, financierName), HttpStatus.OK);
     }
-    @PutMapping("/{financierName}/collectDailyTotal")
+    @PostMapping("/{financierName}/collectDailyTotal")
     @PreAuthorize("hasRole('FINANCIER')")
     public ResponseEntity<Double> collectDailyTotal(@PathVariable String financierName){
         return new ResponseEntity(financierService.getShiftPayments(financierName), HttpStatus.OK);

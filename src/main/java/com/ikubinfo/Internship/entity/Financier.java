@@ -22,7 +22,7 @@ public class Financier implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Double salary;
     private Double gasStationBalance = 0.0;
     @CreationTimestamp

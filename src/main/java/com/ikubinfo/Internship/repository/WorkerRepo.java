@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface WorkerRepo extends JpaRepository<Worker, Long > {
-    Void deleteByWorkerDetails_Username(String adminId);
+    Integer deleteByWorkerDetails_Username(String adminId);
     Worker getByWorkerDetails_Username(String name);
     List<Worker> findAll();
     Boolean existsByWorkerDetails_Username(String name);
