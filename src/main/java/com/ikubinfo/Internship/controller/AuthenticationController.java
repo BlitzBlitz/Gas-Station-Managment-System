@@ -6,7 +6,6 @@ import com.ikubinfo.Internship.entity.Admin;
 import com.ikubinfo.Internship.service.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +26,8 @@ public class AuthenticationController {
         return new ResponseEntity<>(AdminDto.entityToDto(saved), HttpStatus.CREATED);
     }
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(){
+    public ResponseEntity<String> authenticate(@Valid @RequestBody UserDto userDto){
+        //authService
         return new ResponseEntity<>("Authenticated successfully", HttpStatus.OK);
     }
 }

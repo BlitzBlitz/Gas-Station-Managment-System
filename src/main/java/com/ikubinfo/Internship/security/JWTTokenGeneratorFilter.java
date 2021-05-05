@@ -36,7 +36,6 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 					.signWith(key).compact();
 			response.setHeader(SecurityConstants.JWT_HEADER, jwt);
 		}
-
 		chain.doFilter(request, response);
 	}
 

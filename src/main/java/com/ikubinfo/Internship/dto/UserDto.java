@@ -25,7 +25,5 @@ public class UserDto {
             message = "Password must be at least 8 char, have 1 number, 1 special char, no white spaces")
     private String password;
 
-    @NotNull
-    @NotEmpty
     private String role;
 }

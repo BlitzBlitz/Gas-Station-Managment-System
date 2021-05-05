@@ -2,6 +2,7 @@ package com.ikubinfo.Internship.controller;
 
 
 import com.ikubinfo.Internship.InternshipApplication;
+import com.ikubinfo.Internship.dto.OrderDto;
 import com.ikubinfo.Internship.dto.WorkerDto;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -70,16 +71,32 @@ public class WorkerControllerIT {
     public void getShiftBalanceTest() throws JSONException {
         ResponseEntity<String> response = sendRequest("/workers/agimi/shiftBalance",
                 null, HttpMethod.GET);
-        assertEquals(1000.0, response.getBody());
+        assertEquals("1000.0", response.getBody());
     }
     @Test
     @DirtiesContext
     public void getShiftsHistoryTest() throws JSONException {
-
         ResponseEntity<String> response = sendRequest("/workers/agimi/shiftHistory",
                 null, HttpMethod.GET);
-        System.out.println(response.getBody());
-        assertEquals(1000.0, response.getBody());
+       JSONAssert.assertEquals("[[2021-04-04 , 12200.0],[2021-05-04 , 1200.0]]",
+               response.getBody(), false);
+    }
+
+    @Test
+    @DirtiesContext
+    public void getWorkersBalancesTest() throws JSONException {
+        ResponseEntity<String> response = sendRequest("/workers/balances",
+                null, HttpMethod.GET);
+        JSONAssert.assertEquals("{berti: 5000.0, agimi: 1000.0}", response.getBody(),true);
+    }
+
+    @Test
+    @DirtiesContext
+    public void processOrderTest() throws JSONException {
+        ResponseEntity<String> response = sendRequest("/workers/agimi/processOrder",
+                new OrderDto("gas", 20.0), HttpMethod.POST);
+        JSONAssert.assertEquals("{ fuelType : gas , amount :20.0, total :2480.0, processedBy : agimi}",
+                response.getBody(), false);
     }
 
 

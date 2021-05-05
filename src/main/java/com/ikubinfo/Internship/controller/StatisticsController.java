@@ -4,7 +4,6 @@ import com.ikubinfo.Internship.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -20,7 +19,7 @@ public class StatisticsController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/year")
+    @GetMapping("/yearly")
     @PreAuthorize("hasAnyRole('ADMIN', 'FINANCIER')")
     public ResponseEntity<List<Object[]>> getYearlyStatistics(@RequestParam Integer year) {
         return new ResponseEntity<>(orderService.getYearlyStatistics(year), HttpStatus.OK);
