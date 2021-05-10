@@ -17,6 +17,6 @@ public class InternshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-
+//		adminService.registerAdmin( new UserDto("miri", "ecenVet", "ADMIN"));
 	}
 }

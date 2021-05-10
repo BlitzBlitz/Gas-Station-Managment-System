@@ -1,5 +1,6 @@
 package com.ikubinfo.Internship.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "update admin set is_deleted = true where id=?")
@@ -35,5 +37,7 @@ public class Admin implements Serializable {
 
     @OneToMany(mappedBy = "changedBy")
     private List<PriceData> priceData = new ArrayList<>();
+
+
 
 }

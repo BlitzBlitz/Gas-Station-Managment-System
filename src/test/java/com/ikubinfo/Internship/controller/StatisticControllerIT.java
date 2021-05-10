@@ -29,7 +29,7 @@ public class StatisticControllerIT {
     public void getYearlyStatisticsTest() throws JSONException {
         ResponseEntity<String> response = sendRequest("/statistics/yearly?year=2021", null, HttpMethod.GET);
         System.out.println(response.getBody());
-        JSONAssert.assertEquals("[{name : agimi}]", response.getBody(), false);
+        JSONAssert.assertEquals("[[2021,5,34400.0],[2021,4,15400.0]]", response.getBody(), false);
     }
 
     @Test
@@ -38,9 +38,17 @@ public class StatisticControllerIT {
         ResponseEntity<String> response = sendRequest("/statistics/total?getBy=year",
                 LocalDate.of(2021,5,4), HttpMethod.POST);
         System.out.println(response.getBody());
-        JSONAssert.assertEquals("[{name : agimi}]", response.getBody(), false);
+        JSONAssert.assertEquals("49800.0", response.getBody(), false);
     }
 
+    @Test
+    @DirtiesContext
+    public void getNumberOfOrdersTest() throws JSONException {
+        ResponseEntity<String> response = sendRequest("/statistics/numberOfOrders?getBy=year",
+                LocalDate.of(2021,5,4), HttpMethod.POST);
+        System.out.println(response.getBody());
+        JSONAssert.assertEquals("4", response.getBody(), false);
+    }
 
 
     public ResponseEntity<String> sendRequest(String urlAdd, Object body, HttpMethod method) {

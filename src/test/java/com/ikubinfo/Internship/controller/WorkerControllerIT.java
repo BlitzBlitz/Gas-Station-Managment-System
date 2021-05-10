@@ -99,8 +99,6 @@ public class WorkerControllerIT {
                 response.getBody(), false);
     }
 
-
-
     public ResponseEntity<String> sendRequest(String urlAdd, Object body, HttpMethod method) {
         TestRestTemplate testRestTemplate = new TestRestTemplate();
         String url = "http://localhost:" + port + urlAdd;

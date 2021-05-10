@@ -40,6 +40,13 @@ public class Financier implements Serializable {
     @OneToMany(mappedBy = "boughtByFinancier")
     private List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();
 
+    public Financier(Long id, Double salary, Double gasStationBalance, boolean isDeleted, User financierDetails) {
+        this.id = id;
+        this.salary = salary;
+        this.gasStationBalance = gasStationBalance;
+        this.isDeleted = isDeleted;
+        this.financierDetails = financierDetails;
+    }
 
     public Double invest(Double amount){
         this.gasStationBalance += amount;

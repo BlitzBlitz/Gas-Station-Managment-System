@@ -5,6 +5,7 @@ import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.entity.Financier;
 import com.ikubinfo.Internship.entity.User;
 import com.ikubinfo.Internship.entity.Worker;
+import com.ikubinfo.Internship.exception.ExistsReqException;
 import com.ikubinfo.Internship.exception.InvalidReqException;
 import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.FinancierRepo;
@@ -13,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -42,17 +42,17 @@ public class FinancierService {
     @Transactional
     public Financier registerFinancier(FinancierDto financierDto) {
         if (financierRepo.existsByFinancierDetails_Username(financierDto.getUsername())) {                      //exists
-            throw new EntityExistsException("Financier already exists");
+            throw new ExistsReqException("Financier already exists");
         }
         Financier oldFinancier = financierRepo.getFromHistory(financierDto.getUsername());
-        if (oldFinancier != null) {                                                                           //exists in history
+        if (oldFinancier != null) {                                                                           //exists in history(disabled)
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            oldFinancier.setDeleted(false);
+            oldFinancier.setDeleted(false);                                                                     //enable
             oldFinancier.getFinancierDetails().setPassword(passwordEncoder.encode(financierDto.getPassword()));
             oldFinancier.setSalary(financierDto.getSalary());
             return financierRepo.save(oldFinancier);
         }
-        User financierDetails = registrationService.registerUser(new UserDto(
+        User financierDetails = registrationService.registerUser(new UserDto(                               //new
                 financierDto.getUsername(), financierDto.getPassword(), "FINANCIER"
         ));
         Financier financier = new Financier();

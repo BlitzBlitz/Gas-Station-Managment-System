@@ -23,13 +23,14 @@ import java.util.stream.StreamSupport;
 public class AdminService {
     private final AdminRepo adminRepo;
     private final RegistrationService registrationService;
+    //TODO // is it a better way to inject this?
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     public AdminService(AdminRepo adminRepo, RegistrationService registrationService) {
         this.adminRepo = adminRepo;
         this.registrationService = registrationService;
     }
-
 
     public List<Admin> getAllAdmins() {
         return StreamSupport.stream(adminRepo.findAll().spliterator(), false)     //converting from iterable to list
@@ -43,18 +44,13 @@ public class AdminService {
         return adminRepo.getByAdminDetails_Username(adminName);
     }
 
-    public Admin getAdminByName(String name) {
-        return adminRepo.getByAdminDetails_Username(name);
-    }
-
     public Admin registerAdmin(UserDto userDto) throws EntityExistsException {
         if(adminRepo.existsByAdminDetails_Username(userDto.getUsername())){            //exists
             throw new ExistsReqException("Admin already exists");
         }
-        Admin oldAdmin = adminRepo.getFromHistory(userDto.getUsername());                  //exists in history
+        Admin oldAdmin = adminRepo.getFromHistory(userDto.getUsername());                  //exists in history(disabled)
         if(oldAdmin != null){
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            oldAdmin.setDeleted(false);
+            oldAdmin.setDeleted(false);                                                     //enable
             oldAdmin.getAdminDetails().setPassword(passwordEncoder.encode(userDto.getPassword()));
             return adminRepo.save(oldAdmin);
         }
@@ -78,5 +74,6 @@ public class AdminService {
     public int deleteAdmin(String name) {
         return adminRepo.deleteByAdminDetails_Username(name);
     }
+
 
 }

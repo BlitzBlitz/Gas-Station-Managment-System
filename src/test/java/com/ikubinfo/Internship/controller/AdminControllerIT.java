@@ -70,4 +70,5 @@ public class AdminControllerIT {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         return testRestTemplate.exchange(url, method, entity, String.class);
     }
+
 }

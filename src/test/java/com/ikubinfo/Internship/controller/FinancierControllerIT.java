@@ -67,7 +67,7 @@ public class FinancierControllerIT {
     public void investTest() throws JSONException {
         String url = "http://localhost:" + port + "/financiers/beni/invest";
         ResponseEntity<String> response = sendRequest(url,2000.0, HttpMethod.POST);
-        assertEquals(2000.0, Double.parseDouble(response.getBody()));
+        assertEquals(102000.0, Double.parseDouble(response.getBody()));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class FinancierControllerIT {
     public void collectDailyTotalTest() throws JSONException {
         String url = "http://localhost:" + port + "/financiers/beni/collectDailyTotal";
         ResponseEntity<String> response = sendRequest(url, null, HttpMethod.POST);
-        assertEquals(1000.0, Double.parseDouble(response.getBody()));
+        assertEquals(106000.0, Double.parseDouble(response.getBody()));
     }
 
     public ResponseEntity<String> sendRequest(String url, Object body, HttpMethod method) {
