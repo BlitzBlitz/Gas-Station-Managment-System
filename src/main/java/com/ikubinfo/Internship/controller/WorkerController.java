@@ -6,6 +6,7 @@ import com.ikubinfo.Internship.dto.OrderDto;
 import com.ikubinfo.Internship.dto.WorkerDto;
 import com.ikubinfo.Internship.entity.Worker;
 import com.ikubinfo.Internship.service.WorkerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class WorkerController {
     private final WorkerService workerService;
 
+    @Autowired
     public WorkerController(WorkerService workerService) {
         this.workerService = workerService;
     }

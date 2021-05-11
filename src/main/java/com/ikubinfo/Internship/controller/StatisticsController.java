@@ -1,6 +1,7 @@
 package com.ikubinfo.Internship.controller;
 
 import com.ikubinfo.Internship.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,7 @@ public class StatisticsController {
 
     private final OrderService orderService;
 
+    @Autowired
     public StatisticsController(OrderService orderService) {
         this.orderService = orderService;
     }

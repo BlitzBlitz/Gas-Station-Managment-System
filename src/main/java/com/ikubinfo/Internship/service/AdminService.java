@@ -9,7 +9,6 @@ import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.AdminRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -24,7 +23,7 @@ public class AdminService {
     private final AdminRepo adminRepo;
     private final RegistrationService registrationService;
     //TODO // is it a better way to inject this?
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     public AdminService(AdminRepo adminRepo, RegistrationService registrationService) {
@@ -52,12 +51,14 @@ public class AdminService {
         if(oldAdmin != null){
             oldAdmin.setDeleted(false);                                                     //enable
             oldAdmin.getAdminDetails().setPassword(passwordEncoder.encode(userDto.getPassword()));
-            return adminRepo.save(oldAdmin);
+            adminRepo.save(oldAdmin);
+            return oldAdmin;
         }
         User adminDetails = registrationService.registerUser(userDto);                  //new
         Admin admin = new Admin();
         admin.setAdminDetails(adminDetails);
-        return adminRepo.save(admin);
+        adminRepo.save(admin);
+        return admin;
     }
 
     public Admin updateAdmin(AdminDto adminDto) throws EntityNotFoundException {
@@ -65,7 +66,6 @@ public class AdminService {
             throw new NotFoundReqException("Admin does not exist");
         }
         Admin admin = adminRepo.getByAdminDetails_Username(adminDto.getName());
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         admin.getAdminDetails().setPassword(passwordEncoder.encode(adminDto.getPassword()));
         return adminRepo.save(admin);
     }
@@ -74,6 +74,5 @@ public class AdminService {
     public int deleteAdmin(String name) {
         return adminRepo.deleteByAdminDetails_Username(name);
     }
-
 
 }
