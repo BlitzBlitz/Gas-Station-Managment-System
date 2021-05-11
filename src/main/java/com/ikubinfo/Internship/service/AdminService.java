@@ -22,6 +22,7 @@ import java.util.stream.StreamSupport;
 public class AdminService {
     private final AdminRepo adminRepo;
     private final RegistrationService registrationService;
+
     //TODO // is it a better way to inject this?
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
