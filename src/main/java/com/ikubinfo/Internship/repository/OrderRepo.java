@@ -46,7 +46,7 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     List<Object[]> getAllMonthlyTotalsOrderByTotal(int year);
 
 
-    //TODO
+    //TODO Select max (select sum())..
 //    @Query(value = "SELECT SUM(o.total) as hour_total, HOUR(o.orderDate ) as order_hour "+
 //            "FROM Order o "+
 //            "WHERE cast(o.orderDate as LocalDate) = :date "+

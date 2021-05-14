@@ -16,7 +16,7 @@ public class Authority implements Serializable {
     Long id;
     @ManyToOne
     @JoinColumn(name = "username",referencedColumnName = "username")
-    User username;
+    UserD username;
     @Column(nullable = false)
     private String authority;
 

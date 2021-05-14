@@ -36,7 +36,7 @@ public class Worker implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "username",referencedColumnName = "username")
-    private User workerDetails;
+    private UserD workerDetails;
 
     @OneToMany(mappedBy = "processedBy")
     private List<Order> orders = new ArrayList<>();

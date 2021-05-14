@@ -2,6 +2,7 @@ package com.ikubinfo.Internship.controller;
 
 
 import com.ikubinfo.Internship.InternshipApplication;
+import com.ikubinfo.Internship.InternshipApplicationTests;
 import com.ikubinfo.Internship.dto.OrderDto;
 import com.ikubinfo.Internship.dto.WorkerDto;
 import org.json.JSONException;
@@ -23,23 +24,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = InternshipApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(value = "test")
-public class WorkerControllerIT {
+public class WorkerControllerIT extends InternshipApplicationTests {
     @LocalServerPort
     private int port;
-
 
     @Test
     @DirtiesContext
     public void getWorkersTest() throws JSONException {
         ResponseEntity<String> response = sendRequest("/workers", null, HttpMethod.GET);
-        System.out.println(response.getBody());
         JSONAssert.assertEquals("[{name : agimi}]", response.getBody(), false);
     }
     @Test
     @DirtiesContext
     public void getWorkerTest() throws JSONException {
         ResponseEntity<String> response = sendRequest("/workers/agimi", null, HttpMethod.GET);
-        System.out.println(response.getBody());
         JSONAssert.assertEquals("{name : agimi}", response.getBody(), false);
     }
 

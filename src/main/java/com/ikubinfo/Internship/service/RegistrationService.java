@@ -2,7 +2,7 @@ package com.ikubinfo.Internship.service;
 
 import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.entity.Authority;
-import com.ikubinfo.Internship.entity.User;
+import com.ikubinfo.Internship.entity.UserD;
 import com.ikubinfo.Internship.exception.ExistsReqException;
 import com.ikubinfo.Internship.repository.AuthorityRepo;
 import com.ikubinfo.Internship.repository.UserRepo;
@@ -21,15 +21,15 @@ public class RegistrationService {
         this.authorityRepo = authorityRepo;
     }
     @Transactional
-    public User registerUser(UserDto userDto) {
+    public UserD registerUser(UserDto userDto) {
         if(userRepo.existsByUsername(userDto.getUsername())){
             throw new ExistsReqException("User already exists!");
         }
         BCryptPasswordEncoder pwEncoder = new BCryptPasswordEncoder();
-        User user = new User(userDto.getUsername(), pwEncoder.encode(userDto.getPassword()));
+        UserD userD = new UserD(userDto.getUsername(), pwEncoder.encode(userDto.getPassword()));
         Authority authority = new Authority("ROLE_"+userDto.getRole());
-        authority.setUsername(user);
+        authority.setUsername(userD);
         authorityRepo.save(authority);
-        return userRepo.save(user);
+        return userRepo.save(userD);
     }
 }

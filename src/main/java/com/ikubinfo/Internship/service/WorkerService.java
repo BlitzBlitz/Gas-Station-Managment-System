@@ -6,7 +6,7 @@ import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.dto.WorkerDto;
 import com.ikubinfo.Internship.entity.Fuel;
 import com.ikubinfo.Internship.entity.Order;
-import com.ikubinfo.Internship.entity.User;
+import com.ikubinfo.Internship.entity.UserD;
 import com.ikubinfo.Internship.entity.Worker;
 import com.ikubinfo.Internship.exception.ExistsReqException;
 import com.ikubinfo.Internship.exception.NotFoundReqException;
@@ -60,10 +60,10 @@ public class WorkerService {
         }
 
         Worker worker = WorkerDto.dtoToWorker(workerDto);                                   //new
-        User user = registrationService.registerUser(new UserDto(
+        UserD userD = registrationService.registerUser(new UserDto(
                 workerDto.getName(), workerDto.getPassword(), "WORKER"
         ));
-        worker.setWorkerDetails(user);
+        worker.setWorkerDetails(userD);
         return workerRepo.save(worker);
     }
 
@@ -88,9 +88,9 @@ public class WorkerService {
             throw new NotFoundReqException("Worker not found");
         }
         Worker worker = WorkerDto.dtoToWorker(workerDto);
-        User user = userRepo.getByUsername(workerDto.getName());
-        user.setPassword(workerDto.getPassword());
-        worker.setWorkerDetails(user);
+        UserD userD = userRepo.getByUsername(workerDto.getName());
+        userD.setPassword(workerDto.getPassword());
+        worker.setWorkerDetails(userD);
         return workerRepo.save(worker);
     }
     @Transactional

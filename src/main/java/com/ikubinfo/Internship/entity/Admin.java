@@ -33,7 +33,7 @@ public class Admin implements Serializable {
     @ManyToOne
     @JoinColumn(name = "username",referencedColumnName = "username")
     @Where(clause = "enabled = 1")
-    private User adminDetails;
+    private UserD adminDetails;
 
     @OneToMany(mappedBy = "changedBy")
     private List<PriceData> priceData = new ArrayList<>();

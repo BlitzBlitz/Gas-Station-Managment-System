@@ -13,7 +13,7 @@ import java.util.Objects;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-public class User implements Serializable {
+public class UserD implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -34,7 +34,7 @@ public class User implements Serializable {
     private List<Financier> financiers = new ArrayList<>();
 
 
-    public User(String username, String encodedPassword) {
+    public UserD(String username, String encodedPassword) {
         this.username = username;
         this.password = encodedPassword;
         this.enabled = 1;
@@ -44,9 +44,9 @@ public class User implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return username.equals(user.username) &&
-                password.equals(user.password);
+        UserD userD = (UserD) o;
+        return username.equals(userD.username) &&
+                password.equals(userD.password);
     }
 
     @Override

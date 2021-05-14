@@ -34,13 +34,13 @@ public class Financier implements Serializable {
     @ManyToOne
     @JoinColumn(name = "username",referencedColumnName = "username")
     @Where(clause = "enabled = 1")
-    private User financierDetails;
+    private UserD financierDetails;
 
 
     @OneToMany(mappedBy = "boughtByFinancier")
     private List<FuelSupplyData> fuelSupplyDataList = new ArrayList<>();
 
-    public Financier(Long id, Double salary, Double gasStationBalance, boolean isDeleted, User financierDetails) {
+    public Financier(Long id, Double salary, Double gasStationBalance, boolean isDeleted, UserD financierDetails) {
         this.id = id;
         this.salary = salary;
         this.gasStationBalance = gasStationBalance;

@@ -3,7 +3,7 @@ package com.ikubinfo.Internship.service;
 import com.ikubinfo.Internship.dto.AdminDto;
 import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.entity.Admin;
-import com.ikubinfo.Internship.entity.User;
+import com.ikubinfo.Internship.entity.UserD;
 import com.ikubinfo.Internship.exception.ExistsReqException;
 import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.AdminRepo;
@@ -55,7 +55,7 @@ public class AdminService {
             adminRepo.save(oldAdmin);
             return oldAdmin;
         }
-        User adminDetails = registrationService.registerUser(userDto);                  //new
+        UserD adminDetails = registrationService.registerUser(userDto);                  //new
         Admin admin = new Admin();
         admin.setAdminDetails(adminDetails);
         adminRepo.save(admin);

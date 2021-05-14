@@ -3,7 +3,7 @@ package com.ikubinfo.Internship.service;
 import com.ikubinfo.Internship.dto.FinancierDto;
 import com.ikubinfo.Internship.dto.UserDto;
 import com.ikubinfo.Internship.entity.Financier;
-import com.ikubinfo.Internship.entity.User;
+import com.ikubinfo.Internship.entity.UserD;
 import com.ikubinfo.Internship.entity.Worker;
 import com.ikubinfo.Internship.exception.ExistsReqException;
 import com.ikubinfo.Internship.exception.InvalidReqException;
@@ -52,7 +52,7 @@ public class FinancierService {
             oldFinancier.setSalary(financierDto.getSalary());
             return financierRepo.save(oldFinancier);
         }
-        User financierDetails = registrationService.registerUser(new UserDto(                               //new
+        UserD financierDetails = registrationService.registerUser(new UserDto(                               //new
                 financierDto.getUsername(), financierDto.getPassword(), "FINANCIER"
         ));
         Financier financier = new Financier();
