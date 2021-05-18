@@ -5,6 +5,7 @@ import com.ikubinfo.Internship.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,7 +26,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+        return new User(user.getUsername(), user.getPassword(),
                 user.getAuthorities().stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).
                         collect(Collectors.toList()));
     }

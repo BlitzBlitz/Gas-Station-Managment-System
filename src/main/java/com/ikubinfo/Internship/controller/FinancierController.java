@@ -6,7 +6,6 @@ import com.ikubinfo.Internship.service.FinancierService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,7 +31,7 @@ public class FinancierController {
     @GetMapping("/{financierName}")
     @PreAuthorize("hasAnyRole('ADMIN', 'FINANCIER')")
     public ResponseEntity<FinancierDto> getFinancier(@PathVariable String financierName){
-        return new ResponseEntity<FinancierDto>(FinancierDto.entityToDto(financierService.getFinancier(financierName)),
+        return new ResponseEntity<>(FinancierDto.entityToDto(financierService.getFinancier(financierName)),
                 HttpStatus.OK);
     }
 

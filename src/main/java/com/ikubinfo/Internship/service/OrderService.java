@@ -3,6 +3,7 @@ package com.ikubinfo.Internship.service;
 import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,5 +46,9 @@ public class OrderService {
             return orderRepo.getTotalOfYear(date.getYear());
         }
         throw new NotFoundReqException("Wrong filter! Must be one of the following: day, month, year");
+    }
+
+    public List<Object[]> getPeakHourOfDay(LocalDate date) {
+        return orderRepo.getPeakHourForDate(date, PageRequest.of(0, 1));
     }
 }

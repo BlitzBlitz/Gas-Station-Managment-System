@@ -38,4 +38,10 @@ public class StatisticsController {
     public ResponseEntity<Integer> getDayNumberOfOrders(@RequestParam String getBy, @RequestBody LocalDate date) {
         return new ResponseEntity<>(orderService.getNumberOfOrdersBy(getBy, date), HttpStatus.OK);
     }
+
+    @PostMapping("/peakHourOfDay")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FINANCIER')")
+    public ResponseEntity<List<Object[]>> getPeakHourOfDay(@RequestBody LocalDate date) {
+        return new ResponseEntity<>(orderService.getPeakHourOfDay(date), HttpStatus.OK);
+    }
 }

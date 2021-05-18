@@ -1,4 +1,4 @@
-package com.ikubinfo.Internship.config;
+package com.ikubinfo.Internship.security;
 
 
 import com.ikubinfo.Internship.service.JwtUserDetailsService;

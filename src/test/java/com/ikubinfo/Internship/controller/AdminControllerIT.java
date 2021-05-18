@@ -3,7 +3,7 @@ package com.ikubinfo.Internship.controller;
 import com.ikubinfo.Internship.InternshipApplication;
 import com.ikubinfo.Internship.dto.AdminDto;
 import org.json.JSONException;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = InternshipApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,23 +29,20 @@ public class AdminControllerIT {
     @Test
     @DirtiesContext
     public void getAdminsTest() throws JSONException {
-        String url = "http://localhost:" + port + "/admins";
-        ResponseEntity<String> response = sendRequest(url, null, HttpMethod.GET);
+        ResponseEntity<String> response = sendRequest("/admins", null, HttpMethod.GET);
         JSONAssert.assertEquals("[{name : miri}, {name : cimi}]", response.getBody(), false);
     }
     @Test
     @DirtiesContext
     public void getAdminTest() throws JSONException {
-        String url = "http://localhost:" + port + "/admins/miri";
-        ResponseEntity<String> response = sendRequest(url, null, HttpMethod.GET);
+        ResponseEntity<String> response = sendRequest("/admins/miri", null, HttpMethod.GET);
         JSONAssert.assertEquals("{name : miri}", response.getBody(), false);
     }
 
     @Test
     @DirtiesContext
     public void updateAdminTest() throws JSONException {
-        String url = "http://localhost:" + port + "/admins/miri";
-        ResponseEntity<String> response = sendRequest(url, new AdminDto("miri","qwerty!2A"),
+        ResponseEntity<String> response = sendRequest("/admins/miri", new AdminDto("miri","qwerty!2A"),
                 HttpMethod.PUT);
         JSONAssert.assertEquals("{name : miri}", response.getBody(), false);
     }
@@ -52,17 +50,16 @@ public class AdminControllerIT {
     @Test
     @DirtiesContext
     public void deleteAdminTest() throws JSONException {
-        String url = "http://localhost:" + port + "/admins/miri";
-        sendRequest(url, null, HttpMethod.DELETE);
-        ResponseEntity<String> responseGet = sendRequest(url, null,
+        sendRequest("/admins/miri", null, HttpMethod.DELETE);
+        ResponseEntity<String> responseGet = sendRequest("/admins/miri", null,
                 HttpMethod.GET);
         assertEquals(HttpStatus.NOT_FOUND, responseGet.getStatusCode());
     }
 
 
-
     public ResponseEntity<String>  sendRequest(String url,
                                            Object body, HttpMethod method){
+        url = "http://localhost:" + port + url;
         TestRestTemplate testRestTemplate = new TestRestTemplate();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity entity = new HttpEntity(body, headers);

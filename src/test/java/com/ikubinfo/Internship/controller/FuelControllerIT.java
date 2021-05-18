@@ -5,7 +5,7 @@ import com.ikubinfo.Internship.dto.FuelDto;
 import com.ikubinfo.Internship.dto.FuelSupplyDataDto;
 import com.ikubinfo.Internship.dto.PriceDataDto;
 import org.json.JSONException;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,24 +31,21 @@ public class FuelControllerIT {
     @Test
     @DirtiesContext
     public void getAllFuelsTest() throws JSONException {
-        String url = "http://localhost:" + port + "/fuels";
-        ResponseEntity<String> response = sendRequest(url, null, HttpMethod.GET);
+        ResponseEntity<String> response = sendRequest("/fuels", null, HttpMethod.GET);
         JSONAssert.assertEquals("[{type : gas}]", response.getBody(), false);
     }
 
     @Test
     @DirtiesContext
     public void getFuelTest() throws JSONException {
-        String url = "http://localhost:" + port + "/fuels/gas";
-        ResponseEntity<String> response = sendRequest(url, null, HttpMethod.GET);
+        ResponseEntity<String> response = sendRequest("/fuels/gas", null, HttpMethod.GET);
         JSONAssert.assertEquals("{type : gas}", response.getBody(), false);
     }
 
     @Test
     @DirtiesContext
     public void getFuelHistoryTest() throws JSONException {
-        String url = "http://localhost:" + port + "/fuels/gas/history";
-        ResponseEntity<String> response = sendRequest(url, null, HttpMethod.GET);
+        ResponseEntity<String> response = sendRequest("/fuels/gas/history", null, HttpMethod.GET);
         JSONAssert.assertEquals("[{price:120.0}, {price:122.0}]",
                 response.getBody(), false);
     }
@@ -56,8 +53,7 @@ public class FuelControllerIT {
     @Test
     @DirtiesContext
     public void addFuelTest() throws JSONException {
-        String url = "http://localhost:" + port + "/fuels";
-        ResponseEntity<String> response = sendRequest(url,
+        ResponseEntity<String> response = sendRequest("/fuels",
                 new FuelDto("gasoline", 120., 3000.0),
                 HttpMethod.POST);
         JSONAssert.assertEquals("{type : gasoline}", response.getBody(), false);
@@ -66,8 +62,7 @@ public class FuelControllerIT {
     @Test
     @DirtiesContext
     public void changePriceTest() throws JSONException {
-        String url = "http://localhost:" + port + "/fuels/gas";
-        ResponseEntity<String> response = sendRequest(url,
+        ResponseEntity<String> response = sendRequest("/fuels/gas",
                 new PriceDataDto(130.0, "gas", "miri", new Date()),
                 HttpMethod.PUT);
         JSONAssert.assertEquals("{type : gas, currentPrice:130}", response.getBody(), false);
@@ -76,9 +71,8 @@ public class FuelControllerIT {
     @Test
     @DirtiesContext
     public void deleteFuelTest() throws JSONException {
-        String url = "http://localhost:" + port + "/fuels/gas";
-        sendRequest(url, null, HttpMethod.DELETE);
-        ResponseEntity<String> responseGet = sendRequest(url, null, HttpMethod.GET);
+        sendRequest("/fuels/gas", null, HttpMethod.DELETE);
+        ResponseEntity<String> responseGet = sendRequest("/fuels/gas", null, HttpMethod.GET);
         System.out.println(responseGet.getBody());
         assertEquals(HttpStatus.NOT_FOUND, responseGet.getStatusCode());
     }
@@ -86,8 +80,7 @@ public class FuelControllerIT {
     @Test
     @DirtiesContext
     public void addFuelSupplyTest() throws JSONException {
-        String url = "http://localhost:" + port + "/fuels/gas";
-        ResponseEntity<String> response = sendRequest(url,
+        ResponseEntity<String> response = sendRequest("/fuels/gas",
                 new FuelSupplyDataDto("gas", 120.0, 10.0, "beni"),
                 HttpMethod.POST);
         System.out.println(response.getBody());
@@ -96,6 +89,7 @@ public class FuelControllerIT {
 
     public ResponseEntity<String> sendRequest(String url,
                                               Object body, HttpMethod method) {
+        url = "http://localhost:" + port + url;
         TestRestTemplate testRestTemplate = new TestRestTemplate();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity entity = new HttpEntity(body, headers);

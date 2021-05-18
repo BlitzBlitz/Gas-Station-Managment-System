@@ -1,13 +1,17 @@
 package com.ikubinfo.Internship.repository;
 
 import com.ikubinfo.Internship.entity.Order;
-import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface OrderRepo extends JpaRepository<Order, Long> {
 
@@ -53,7 +57,12 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
 //            "GROUP BY HOUR(o.orderDate )"+
 //            "ORDER BY hour_total DESC "+
 //            "LIMIT 1")
-//    List<Object[]> getPeakHourForDate(LocalDate date);
+    @Query(value = "SELECT SUM(o.total) as hour_total, HOUR(o.orderDate) as order_hour "+
+            "FROM Order o "+
+            "WHERE cast(o.orderDate as LocalDate) = :date "+
+            "GROUP BY HOUR(o.orderDate )"+
+            "ORDER BY hour_total DESC")
+    List<Object[]> getPeakHourForDate(LocalDate date, Pageable pageable);
 
 
 }

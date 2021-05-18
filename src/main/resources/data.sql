@@ -59,13 +59,13 @@ INSERT INTO orders(
 
 INSERT INTO orders(
 	id, amount, order_date, total, fuel_type_id, processed_by_id)
-	VALUES (1002, 100, '2021-05-04 10:31:16.777171', 33200, 10001, 20001);
+	VALUES (1002, 100, '2021-04-04 10:31:16.777171', 33200, 10001, 20001);
 
 
 INSERT INTO orders(
 	id, amount, order_date, total, fuel_type_id, processed_by_id)
-	VALUES (1003, 10, '2021-04-04 10:31:16.777171', 12200, 10001, 10001);
+	VALUES (1003, 10, '2021-04-04 11:00:16.777171', 12200, 10001, 10001);
 
 INSERT INTO orders(
 	id, amount, order_date, total, fuel_type_id, processed_by_id)
-	VALUES (1004, 100, '2021-04-04 10:31:16.777171', 3200, 10001, 20001);
+	VALUES (1004, 100, '2021-04-04 10:20:16.777171', 3200, 10001, 20001);

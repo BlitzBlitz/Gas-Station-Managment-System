@@ -3,7 +3,7 @@ package com.ikubinfo.Internship.controller;
 
 import com.ikubinfo.Internship.InternshipApplication;
 import org.json.JSONException;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +29,7 @@ public class StatisticControllerIT {
     public void getYearlyStatisticsTest() throws JSONException {
         ResponseEntity<String> response = sendRequest("/statistics/yearly?year=2021", null, HttpMethod.GET);
         System.out.println(response.getBody());
-        JSONAssert.assertEquals("[[2021,5,34400.0],[2021,4,15400.0]]", response.getBody(), false);
+        JSONAssert.assertEquals("[[2021,4,48600.0],[2021,5,1200.0]]", response.getBody(), false);
     }
 
     @Test
@@ -48,6 +48,15 @@ public class StatisticControllerIT {
                 LocalDate.of(2021,5,4), HttpMethod.POST);
         System.out.println(response.getBody());
         JSONAssert.assertEquals("4", response.getBody(), false);
+    }
+
+    @Test
+    @DirtiesContext
+    public void getPeakHourOfDayTest() throws JSONException {
+        ResponseEntity<String> response = sendRequest("/statistics/peakHourOfDay",
+                LocalDate.of(2021,4,4), HttpMethod.POST);
+        System.out.println(response.getBody());
+        JSONAssert.assertEquals("[[36400.0,10]]", response.getBody(), false);
     }
 
 

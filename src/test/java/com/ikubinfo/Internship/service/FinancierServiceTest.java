@@ -49,18 +49,18 @@ public class FinancierServiceTest {
         assertTrue(exception.getMessage().equals("Financier already exists"));
     }
 
-//    @Test
-//    public void registerFinancierTestCase2() {           //disabled
-//        Financier financier = new Financier(1L, 2000.0, 10000.0, false,
-//                new User("miri", "ecenVet"));
-//        Financier oldFinancier = new Financier(1L, 2000.0, 10000.0, true,
-//                new User("miri", "VetEcen"));
-//        Mockito.when(financierRepo.existsByFinancierDetails_Username("miri")).thenReturn(false);
-//        Mockito.when(financierRepo.getFromHistory("miri")).thenReturn(oldFinancier);
-//        Mockito.when(financierRepo.save(oldFinancier)).thenReturn(admin);
-//        assertEquals(admin, adminService.registerAdmin(
-//                new UserDto("beni", "ecenVet", "ADMIN")));
-//    }
+    @Test
+    public void registerFinancierTestCase2() {           //disabled
+        Financier financier = new Financier(1L, 2000.0, 10000.0, false,
+                new UserD("miri", "ecenVet"));
+        Financier oldFinancier = new Financier(1L, 2000.0, 10000.0, true,
+                new UserD("miri", "VetEcen"));
+        Mockito.when(financierRepo.existsByFinancierDetails_Username("miri")).thenReturn(false);
+        Mockito.when(financierRepo.getFromHistory("miri")).thenReturn(oldFinancier);
+        Mockito.when(financierRepo.save(oldFinancier)).thenReturn(financier);
+        assertEquals(financier, financierService.registerFinancier(
+                new FinancierDto("beni", "ecenVet", 2000.0)));
+    }
 //
 //    @Test
 //    public void registerAdminTestCase3() {           //new

@@ -3,7 +3,7 @@ package com.ikubinfo.Internship.controller;
 import com.ikubinfo.Internship.InternshipApplication;
 import com.ikubinfo.Internship.dto.FinancierDto;
 import org.json.JSONException;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,16 +28,14 @@ public class FinancierControllerIT {
     @Test
     @DirtiesContext
     public void getFinancierTest() throws JSONException {
-        String url = "http://localhost:" + port + "/financiers/beni";
-        ResponseEntity<String> response = sendRequest(url, null, HttpMethod.GET);
+        ResponseEntity<String> response = sendRequest("/financiers/beni", null, HttpMethod.GET);
         JSONAssert.assertEquals("{username : beni}", response.getBody(), false);
     }
 
     @Test
     @DirtiesContext
     public void registerFinancierTest() throws JSONException {
-        String url = "http://localhost:" + port + "/financiers";
-        ResponseEntity<String> response = sendRequest(url,
+        ResponseEntity<String> response = sendRequest("/financiers",
                 new FinancierDto("genti", "Password!1", 3000.0),
                 HttpMethod.POST);
         JSONAssert.assertEquals("{username : genti}", response.getBody(), false);
@@ -46,8 +44,7 @@ public class FinancierControllerIT {
     @Test
     @DirtiesContext
     public void updateFinancierTest() throws JSONException {
-        String url = "http://localhost:" + port + "/financiers/beni";
-        ResponseEntity<String> response = sendRequest(url,
+        ResponseEntity<String> response = sendRequest("/financiers/beni",
                 new FinancierDto("beni", "Password!1", 2500.0),
                 HttpMethod.PUT);
         JSONAssert.assertEquals("{username : beni, salary: 2500.0}", response.getBody(), false);
@@ -56,29 +53,28 @@ public class FinancierControllerIT {
     @Test
     @DirtiesContext
     public void deleteFinancierTest() throws JSONException {
-        String url = "http://localhost:" + port + "/financiers/beni";
-        sendRequest(url, null, HttpMethod.DELETE);
-        ResponseEntity<String> responseGet = sendRequest(url, null, HttpMethod.GET);
+        sendRequest("/financiers/beni", null, HttpMethod.DELETE);
+        ResponseEntity<String> responseGet = sendRequest("/financiers/beni", null, HttpMethod.GET);
         assertEquals(HttpStatus.NOT_FOUND, responseGet.getStatusCode());
     }
 
     @Test
     @DirtiesContext
     public void investTest() throws JSONException {
-        String url = "http://localhost:" + port + "/financiers/beni/invest";
-        ResponseEntity<String> response = sendRequest(url,2000.0, HttpMethod.POST);
+        ResponseEntity<String> response = sendRequest("/financiers/beni/invest",2000.0, HttpMethod.POST);
         assertEquals(102000.0, Double.parseDouble(response.getBody()));
     }
 
     @Test
     @DirtiesContext
     public void collectDailyTotalTest() throws JSONException {
-        String url = "http://localhost:" + port + "/financiers/beni/collectDailyTotal";
-        ResponseEntity<String> response = sendRequest(url, null, HttpMethod.POST);
+        ResponseEntity<String> response = sendRequest("/financiers/beni/collectDailyTotal", null, HttpMethod.POST);
         assertEquals(106000.0, Double.parseDouble(response.getBody()));
     }
 
     public ResponseEntity<String> sendRequest(String url, Object body, HttpMethod method) {
+        url = "http://localhost:" + port + url;
+        System.out.println(url);
         TestRestTemplate testRestTemplate = new TestRestTemplate();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity entity = new HttpEntity(body, headers);

@@ -1,4 +1,4 @@
 package com.ikubinfo.Internship.service;
 
-public class OrderService {
+public class OrderServiceTest {
 }

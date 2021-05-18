@@ -6,7 +6,7 @@ import com.ikubinfo.Internship.InternshipApplicationTests;
 import com.ikubinfo.Internship.dto.OrderDto;
 import com.ikubinfo.Internship.dto.WorkerDto;
 import org.json.JSONException;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +32,7 @@ public class WorkerControllerIT extends InternshipApplicationTests {
     @DirtiesContext
     public void getWorkersTest() throws JSONException {
         ResponseEntity<String> response = sendRequest("/workers", null, HttpMethod.GET);
-        JSONAssert.assertEquals("[{name : agimi}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{name : agimi}, {name : berti}]", response.getBody(), false);
     }
     @Test
     @DirtiesContext
