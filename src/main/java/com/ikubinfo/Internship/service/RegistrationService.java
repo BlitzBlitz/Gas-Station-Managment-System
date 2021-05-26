@@ -6,6 +6,7 @@ import com.ikubinfo.Internship.entity.UserD;
 import com.ikubinfo.Internship.exception.ExistsReqException;
 import com.ikubinfo.Internship.repository.AuthorityRepo;
 import com.ikubinfo.Internship.repository.UserRepo;
+import com.ikubinfo.Internship.security.AppSecurityConfig;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 public class RegistrationService {
     private final UserRepo userRepo;
     private final AuthorityRepo authorityRepo;
+    private final BCryptPasswordEncoder pwEncoder = (BCryptPasswordEncoder) AppSecurityConfig.passwordEncoder();
 
     public RegistrationService(UserRepo userRepo, AuthorityRepo authorityRepo) {
         this.userRepo = userRepo;
@@ -25,11 +27,12 @@ public class RegistrationService {
         if(userRepo.existsByUsername(userDto.getUsername())){
             throw new ExistsReqException("User already exists!");
         }
-        BCryptPasswordEncoder pwEncoder = new BCryptPasswordEncoder();
         UserD userD = new UserD(userDto.getUsername(), pwEncoder.encode(userDto.getPassword()));
         Authority authority = new Authority("ROLE_"+userDto.getRole());
         authority.setUsername(userD);
         authorityRepo.save(authority);
         return userRepo.save(userD);
     }
+
+
 }

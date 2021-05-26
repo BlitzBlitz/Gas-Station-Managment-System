@@ -7,6 +7,7 @@ import com.ikubinfo.Internship.entity.UserD;
 import com.ikubinfo.Internship.exception.ExistsReqException;
 import com.ikubinfo.Internship.exception.NotFoundReqException;
 import com.ikubinfo.Internship.repository.AdminRepo;
+import com.ikubinfo.Internship.security.AppSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,7 @@ import java.util.stream.StreamSupport;
 public class AdminService {
     private final AdminRepo adminRepo;
     private final RegistrationService registrationService;
-
-    //TODO // is it a better way to inject this?
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder = (BCryptPasswordEncoder) AppSecurityConfig.passwordEncoder();
 
     @Autowired
     public AdminService(AdminRepo adminRepo, RegistrationService registrationService) {

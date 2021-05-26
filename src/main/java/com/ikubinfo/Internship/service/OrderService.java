@@ -48,7 +48,8 @@ public class OrderService {
         throw new NotFoundReqException("Wrong filter! Must be one of the following: day, month, year");
     }
 
-    public List<Object[]> getPeakHourOfDay(LocalDate date) {
+    public List<Object[]>
+    getPeakHourOfDay(LocalDate date) {
         return orderRepo.getPeakHourForDate(date, PageRequest.of(0, 1));
     }
 }

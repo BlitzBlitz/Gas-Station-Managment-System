@@ -46,4 +46,9 @@ public class Worker implements Serializable {
         this.salary = salary;
     }
 
+    public Worker(Double shiftBalance, Double salary, UserD workerDetails) {
+        this.shiftBalance = shiftBalance;
+        this.salary = salary;
+        this.workerDetails = workerDetails;
+    }
 }

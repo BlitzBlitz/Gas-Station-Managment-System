@@ -43,6 +43,12 @@ public class Fuel implements Serializable {
         this.currentPrice = currentPrice;
     }
 
+    public Fuel(String type, Double currentPrice, FuelDeposit fuelDeposit) {
+        this.type = type;
+        this.currentPrice = currentPrice;
+        this.fuelDeposit = fuelDeposit;
+    }
+
     @PreRemove
     private void preRemove(){
         this.isDeleted = true;

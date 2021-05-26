@@ -3,6 +3,7 @@ package com.ikubinfo.Internship.service;
 import com.ikubinfo.Internship.dto.FinancierDto;
 import com.ikubinfo.Internship.entity.Financier;
 import com.ikubinfo.Internship.entity.UserD;
+import com.ikubinfo.Internship.entity.Worker;
 import com.ikubinfo.Internship.exception.ExistsReqException;
 import com.ikubinfo.Internship.repository.FinancierRepo;
 import com.ikubinfo.Internship.repository.WorkerRepo;
@@ -15,25 +16,27 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(FinancierService.class )
+@WebMvcTest(FinancierService.class)
 @ActiveProfiles(value = "test")
 public class FinancierServiceTest {
     @Autowired
     FinancierService financierService;
 
     @MockBean
-    private  FinancierRepo financierRepo;
+    private FinancierRepo financierRepo;
     @MockBean
-    private  WorkerRepo workerRepo;
+    private WorkerRepo workerRepo;
     @MockBean
-    private  RegistrationService registrationService;
+    private RegistrationService registrationService;
 
     @Test
-    public void getFinancierTest(){
-        Financier financier = new Financier(1L, 2000.0, 30000.0,false,
+    public void getFinancierTest() {
+        Financier financier = new Financier(1L, 2000.0, 30000.0, false,
                 new UserD("miri", "ecenVet"));
         Mockito.when(financierRepo.getByFinancierDetails_Username("miri")).thenReturn(financier);
         assertEquals(financier, financierService.getFinancier("miri"));
@@ -74,4 +77,25 @@ public class FinancierServiceTest {
 //        Mockito.when(adminRepo.save(Mockito.any())).thenReturn(admin);
 //        assertEquals(admin, adminService.registerAdmin(userDto));
 //    }
+
+    @Test
+    public void investTest() {
+        Financier financier = new Financier(1L, 2000.0, 1000.0, false,
+                new UserD("miri", "ecenVet"));
+        Mockito.when(financierRepo.getByFinancierDetails_Username("miri")).thenReturn(financier);
+        assertEquals(1200.0, financierService.invest(200.0, "miri"));
+    }
+
+    @Test
+    public void getShiftPaymentsTest() {
+        Financier financier = new Financier(1L, 2000.0, 1000.0, false,
+                new UserD("miri", "ecenVet"));
+        Mockito.when(financierRepo.getByFinancierDetails_Username("miri")).thenReturn(financier);
+        Mockito.when(workerRepo.findAll()).thenReturn(Arrays.asList(
+                new Worker(200.0, 1000.0),
+                new Worker(300.0, 1000.0),
+                new Worker(500.0, 1000.0)
+        ));
+        assertEquals(2000.0, financierService.getShiftPayments("miri"));
+    }
 }

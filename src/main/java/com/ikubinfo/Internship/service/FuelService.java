@@ -130,6 +130,7 @@ public class FuelService {
         fuelRepo.save(fuel);
         FuelSupplyData fuelSupplyData = new FuelSupplyData(fuelSupplyDataDto.getAmount(), fuelSupplyDataDto.getPrice(),
                 fuel, financier);
-        return fuelSupplyDataRepo.save(fuelSupplyData);
+        fuelSupplyDataRepo.save(fuelSupplyData);
+        return fuelSupplyData;
     }
 }

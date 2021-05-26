@@ -87,8 +87,11 @@ public class AdminServiceTest {
         UserDto userDto = new UserDto("beni", "ecenVet", "ADMIN");
         Mockito.when(adminRepo.existsByAdminDetails_Username("beni")).thenReturn(false);
         Mockito.when(adminRepo.getFromHistory("beni")).thenReturn(null);
+
         Mockito.when(registrationService.registerUser(userDto)).thenReturn(adminDetails);
+        System.out.println(registrationService.registerUser(userDto));
         Mockito.when(adminRepo.save(Mockito.any())).thenReturn(admin);
+        System.out.println(adminService.registerAdmin(userDto));
         assertEquals(admin, adminService.registerAdmin(userDto));
     }
 
