@@ -24,7 +24,7 @@ public class SwaggerConfig {
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.ikubinfo.Internship"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -47,7 +47,7 @@ public class SwaggerConfig {
                 "Simple API to manage a gas station.",
                 "1.0",
                 "Terms of service",
-                new Contact("Klement Binaj", "www.ikub.com", "klementbinaj@gmail.com"),
+                new Contact("Klement Binaj", "https://ikubinfo.al/", "klementbinaj@gmail.com"),
                 "License of API",
                 "API license URL",
                 Collections.emptyList());
